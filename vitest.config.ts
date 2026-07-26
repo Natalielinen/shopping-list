@@ -1,6 +1,6 @@
 import path from "node:path";
 
-import { defineConfig } from "vitest/config";
+import { defaultExclude, defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 
@@ -25,5 +25,8 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./tests/helpers/vitest-db-setup.ts", "./vitest.setup.ts"],
+    // Каталог `e2e/` — спеки Playwright (@playwright/test); Vitest не должен их
+    // собирать, иначе падает на несовместимом runner-API.
+    exclude: [...defaultExclude, "e2e/**"],
   },
 });
