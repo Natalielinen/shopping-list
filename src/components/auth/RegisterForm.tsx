@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 
 import { authClient } from "@/lib/auth-client";
+import { mapAuthError } from "@/lib/auth-errors";
 import { registerSchema, type RegisterInput } from "@/lib/validation/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -49,12 +50,8 @@ export function RegisterForm() {
     });
 
     if (error) {
-      // Better Auth возвращает конфликт при занятом email.
-      setFormError(
-        error.status === 422 || error.code === "USER_ALREADY_EXISTS"
-          ? "Этот email уже занят"
-          : "Что-то пошло не так. Попробуйте ещё раз."
-      );
+      // Better Auth возвращает конфликт при занятом email; остальное -> сеть.
+      setFormError(mapAuthError(error, "register"));
       return;
     }
 

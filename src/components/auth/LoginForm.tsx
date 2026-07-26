@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 
 import { authClient } from "@/lib/auth-client";
+import { mapAuthError } from "@/lib/auth-errors";
 import { loginSchema, type LoginInput } from "@/lib/validation/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,11 +47,8 @@ export function LoginForm() {
     });
 
     if (error) {
-      setFormError(
-        error.status === 401 || error.status === 403
-          ? "Неверный email или пароль"
-          : "Что-то пошло не так. Попробуйте ещё раз."
-      );
+      // Обобщённая ошибка — не раскрывает существование аккаунта (V7).
+      setFormError(mapAuthError(error, "login"));
       return;
     }
 
