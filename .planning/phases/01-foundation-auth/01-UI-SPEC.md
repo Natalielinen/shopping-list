@@ -1,10 +1,11 @@
 ---
 phase: 1
 slug: foundation-auth
-status: draft
+status: approved
 shadcn_initialized: false
 preset: "shadcn/ui default — Tailwind v4, base color neutral, CSS variables (OKLCH)"
 created: 2026-07-26
+reviewed_at: 2026-07-26
 ---
 
 # Phase 1 — UI Design Contract
@@ -108,18 +109,31 @@ Tone: single consistent register, informal-neutral Russian ("вы"-neutral, no e
 
 ## UI Considerations
 
-> Shape-rooted UI *state* coverage. Empty/error COPY lives in `## Copywriting Contract` above; this section covers state coverage and references those rows.
+> Shape-rooted UI *state* coverage from the post-verification UI-consideration probe. Empty/error COPY lives in `## Copywriting Contract` above; this section covers state coverage and references those rows.
 
-Applicable state considerations resolved: 5 covered, 1 backstop, 0 unresolved.
+Applicable state considerations: **25** across 4 surfaces — **19 covered, 1 backstop, 5 dismissed (N/A in Phase 1), 0 unresolved.**
 
 | Category | Element(s) | Status | Resolution / Reason |
 |----------|------------|--------|---------------------|
-| empty | protected list screen | ✅ covered | Empty (only) state renders the documented empty-state heading + body copy; there is no populated list in Phase 1 |
-| loading | auth submit button (login/register) | ✅ covered | On submit the primary button enters a pending state — disabled + spinner, label unchanged — so the user cannot double-submit while the Server Action runs |
-| error | auth forms (login/register/validation) | ✅ covered | Field-level errors render below inputs (Label role, destructive color); form-level auth failures render in an `Alert` using the documented error copy |
-| populated | app header | ✅ covered | Header renders app name + authenticated user email + logout control on every protected screen |
-| error | protected screen without/expired session | ✅ covered | No error UI — server-side redirect to `/login` (per D-07), so no unauthenticated render of protected content |
-| long-text | user email in header | 🧪 backstop | Long email addresses truncate with ellipsis (single line) and never wrap the header or push out the logout control; verified visually |
+| empty | login + register forms | ✅ covered | Unfilled form is the default state: blank email/password inputs with labels; empty submit blocked by validation (`Заполните это поле`) |
+| loading | login + register forms | ✅ covered | Primary submit button enters a pending state (disabled + spinner, label unchanged) while the Server Action runs — prevents double-submit |
+| error | login + register forms | ✅ covered | Field-level errors below inputs (Label role, destructive color) + form-level `Alert` with documented copy (invalid credentials / email taken / network) |
+| partial | login + register forms | ✅ covered | Partially-filled form validated per-field on submit (RHF + zod resolver); submit blocked until all fields valid |
+| overflow | login + register forms | ✅ covered | On small viewports / open on-screen keyboard the page scrolls vertically; the auth card stays top-centered and never clips inputs |
+| long-text | login + register forms | ✅ covered | A long email in an input scrolls horizontally within the field (native input behavior); no layout break |
+| empty | protected list screen | ✅ covered | Renders the documented empty-state heading `Список пуст` + body copy — the only list state in Phase 1 |
+| loading | protected list screen | ✅ covered | Route-level `loading.tsx` skeleton shown while the authenticated page loads / on navigation |
+| error | protected list screen | ✅ covered | Two paths: no/expired session → server redirect to `/login` (D-07); data-layer failure → route-level `error.tsx` boundary with generic message + retry affordance |
+| populated | protected list screen | ✅ covered | No populated list in Phase 1; the app header is the populated element (app name + email + logout) |
+| zero-one-many | protected list screen | ✅ covered | Only the zero state exists in Phase 1; singular/plural item copy is out of scope until items exist (Phase 2+) |
+| long-text | protected list screen | ✅ covered | Empty-state copy is fixed short Russian strings — no dynamic long text on this screen in Phase 1 |
+| partial | protected list screen | ⛔ dismissed | No data rows in Phase 1 → no partial-data state is possible |
+| overflow | protected list screen | ⛔ dismissed | Empty screen carries no content volume to overflow in Phase 1 |
+| loading | app header | ✅ covered | Header renders server-side from the session (app name + email + logout) — no separate client loading state |
+| long-text | app header (user email) | 🧪 backstop | Long email truncates with ellipsis (single line), never wraps the header or pushes out the logout control — verified visually |
+| empty | app header | ⛔ dismissed | Header renders only on authenticated screens; app name + email always present → no empty state |
+| error | app header | ⛔ dismissed | Email is always available from the session when authenticated → no error render path |
+| partial | app header | ⛔ dismissed | Header fields (name, email, logout) always render together → no partial state |
 
 ---
 
@@ -135,11 +149,13 @@ No third-party registries declared for this phase. Registry vetting gate: not ap
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS (FLAG — non-blocking; see below)
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved (2026-07-26)
+
+**Non-blocking recommendation (Dimension 2 — Visuals):** name the primary visual anchor of the auth screen — focal point = the primary submit button; the card title (`Вход` / `Регистрация`) is the secondary anchor — so the executor does not guess visual priority.
