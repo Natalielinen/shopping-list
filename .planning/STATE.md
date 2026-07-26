@@ -5,15 +5,15 @@ milestone_name: milestone
 current_phase: 01
 current_phase_name: foundation-auth
 status: executing
-stopped_at: Phase 1 UI-SPEC approved
-last_updated: "2026-07-26T13:11:01.376Z"
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-07-26T14:53:32.937Z"
 last_activity: 2026-07-26
 last_activity_desc: Phase 01 execution started
 progress:
   total_phases: 1
   completed_phases: 0
   total_plans: 4
-  completed_plans: 0
+  completed_plans: 2
 ---
 
 # Project State
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-07-26)
 ## Current Position
 
 Phase: 01 (foundation-auth) — EXECUTING
-Plan: 1 of 4
-Status: Executing Phase 01
+Plan: 2 of 4
+Status: Ready to execute
 Last activity: 2026-07-26 — Phase 01 execution started
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
@@ -54,6 +54,11 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: —
 
 *Updated after each plan completion*
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 01 P01-02 | 12 | 3 tasks | 18 files |
 
 ## Accumulated Context
 
@@ -64,6 +69,7 @@ Recent decisions affecting current work:
 
 - [Roadmap]: Vertical MVP — чистый модуль подсчёта очков (с внедряемыми «часами», total на чтении) встроен в Phase 2, а не вынесен в отдельную фазу-движок.
 - [Roadmap]: Auth + изоляция данных (Phase 1) предшествуют любому пользовательскому CRUD; зависимости/блокировка (Phase 5) — в конце, т.к. ссылаются на существующие покупки.
+- [Phase ?]: [01-02] Argon2id через кастомный password.hash/verify + сессия 30 дней (явно) в Better Auth; шов изоляции userId (findItemsForUser) доказан двухпользовательским тестом (AUTH-04)
 
 ### Pending Todos
 
@@ -88,6 +94,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-07-26T08:15:45.578Z
-Stopped at: Phase 1 UI-SPEC approved
-Resume file: D:/myProjects/shopping-list/.planning/phases/01-foundation-auth/01-UI-SPEC.md
+Last session: 2026-07-26T14:53:32.925Z
+Stopped at: Completed 01-02-PLAN.md
+Resume file: None

@@ -12,7 +12,7 @@
 - [ ] **AUTH-01**: Пользователь может зарегистрироваться по email и паролю
 - [ ] **AUTH-02**: Пользователь может войти, и сессия сохраняется между перезагрузками
 - [ ] **AUTH-03**: Пользователь может выйти из аккаунта
-- [ ] **AUTH-04**: Каждый пользователь видит только свои покупки (изоляция данных по userId в слое данных)
+- [x] **AUTH-04**: Каждый пользователь видит только свои покупки (изоляция данных по userId в слое данных)
 
 ### Item Management (CRUD)
 
@@ -88,7 +88,7 @@
 | AUTH-01 | Phase 1 | Pending |
 | AUTH-02 | Phase 1 | Pending |
 | AUTH-03 | Phase 1 | Pending |
-| AUTH-04 | Phase 1 | Pending |
+| AUTH-04 | Phase 1 | Complete |
 | ITEM-01 | Phase 2 | Pending |
 | ITEM-02 | Phase 2 | Pending |
 | ITEM-03 | Phase 2 | Pending |
@@ -115,6 +115,7 @@
 | DEP-02 | Phase 5 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 28 total
 - Mapped to phases: 28 ✓
 - Unmapped: 0 ✓
