@@ -81,17 +81,44 @@
 
 ## Traceability
 
-Какие фазы покрывают какие требования. Заполняется при создании roadmap.
+Какие фазы покрывают какие требования. Заполнено при создании roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (заполняется roadmapper'ом) | — | Pending |
+| AUTH-01 | Phase 1 | Pending |
+| AUTH-02 | Phase 1 | Pending |
+| AUTH-03 | Phase 1 | Pending |
+| AUTH-04 | Phase 1 | Pending |
+| ITEM-01 | Phase 2 | Pending |
+| ITEM-02 | Phase 2 | Pending |
+| ITEM-03 | Phase 2 | Pending |
+| ITEM-04 | Phase 2 | Pending |
+| ITEM-05 | Phase 2 | Pending |
+| SCORE-01 | Phase 2 | Pending |
+| SCORE-02 | Phase 2 | Pending |
+| SCORE-03 | Phase 2 | Pending |
+| SCORE-04 | Phase 2 | Pending |
+| SCORE-05 | Phase 2 | Pending |
+| SCORE-06 | Phase 2 | Pending |
+| LIST-06 | Phase 2 | Pending |
+| LIST-07 | Phase 2 | Pending |
+| ITEM-07 | Phase 3 | Pending |
+| ITEM-08 | Phase 3 | Pending |
+| LIST-01 | Phase 4 | Pending |
+| LIST-02 | Phase 4 | Pending |
+| LIST-03 | Phase 4 | Pending |
+| LIST-04 | Phase 4 | Pending |
+| LIST-05 | Phase 4 | Pending |
+| LIST-08 | Phase 4 | Pending |
+| ITEM-06 | Phase 5 | Pending |
+| DEP-01 | Phase 5 | Pending |
+| DEP-02 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 28 total
-- Mapped to phases: 0 (до roadmap)
-- Unmapped: 28 ⚠️ (до roadmap)
+- Mapped to phases: 28 ✓
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-07-26*
-*Last updated: 2026-07-26 after initial definition*
+*Last updated: 2026-07-26 after roadmap creation (traceability filled)*
