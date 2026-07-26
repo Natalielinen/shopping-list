@@ -213,6 +213,12 @@ _Task 3 (tdd="true") дал два коммита: RED (падающий тес�
 - **Блокер для DB-зависимых планов:** пользователь должен задать `.env.local` (DATABASE_URL/DATABASE_URL_TEST/BETTER_AUTH_SECRET) — иначе миграции и e2e/интеграционные тесты не запустятся.
 - **Примечание по AUTH-01:** в этом плане реализована только валидационная часть (Zod-контракт). Полный поток регистрации (endpoint, auto-login, редирект) реализуется в последующих планах фазы.
 
+## Self-Check: PASSED
+
+- Все созданные файлы существуют: client.ts, drizzle.config.ts, auth.ts, auth.test.ts, vitest.config.ts, vitest.setup.ts, playwright.config.ts, .env.example, form.tsx, components.json, 01-01-SUMMARY.md.
+- Все коммиты присутствуют: f899d01, 6e1a075, 8457a3d, 7db1501, 79a0d63.
+- Прогоны: `npx tsc --noEmit` (0), `npx next build` (compiles), `npx next dev` (GET / 200), `npx vitest run` (5/5 green).
+
 ---
 *Phase: 01-foundation-auth*
 *Completed: 2026-07-26*
