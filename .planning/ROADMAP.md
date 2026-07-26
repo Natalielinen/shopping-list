@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Авторизованный пользователь может выйти из аккаунта с любой страницы и возвращается в состояние «не авторизован».
   4. Любой доступ к данным проходит через слой, ограниченный текущим пользователем, поэтому один пользователь не может загрузить данные другого (подтверждается тестом изоляции на двух пользователях).
 
-**Plans**: 2/4 plans executed
+**Plans**: 3/4 plans executed
 **Wave 1**
 
 - [x] 01-01-PLAN.md — Каркас Walking Skeleton: scaffold Next 16 + стек, Drizzle-клиент, тест-обвязка (Vitest 4 + Playwright), Zod-контракт валидации (TDD)
@@ -45,7 +45,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-03-PLAN.md — Tracer: register → авто-вход → защищённый пустой список + вход с персистентностью сессии (AUTH-01, AUTH-02)
+- [x] 01-03-PLAN.md — Tracer: register → авто-вход → защищённый пустой список + вход с персистентностью сессии (AUTH-01, AUTH-02)
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
@@ -124,7 +124,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Фундамент и аутентификация | 2/4 | In Progress|  |
+| 1. Фундамент и аутентификация | 3/4 | In Progress|  |
 | 2. Добавление покупок с автоматическим приоритетом | 0/TBD | Not started | - |
 | 3. Редактирование и удаление покупок | 0/TBD | Not started | - |
 | 4. Список — сортировка, фильтры и архив | 0/TBD | Not started | - |
