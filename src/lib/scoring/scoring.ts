@@ -48,6 +48,14 @@ const CREDIT_PENALTY = 2;
 const clamp = (value: number, lo: number, hi: number): number =>
   Math.max(lo, Math.min(hi, value));
 
+// Нормализация к UTC-полуночи по UTC-компонентам даты (WR-01). `deadline` из
+// <input type="date"> приводится z.coerce.date() к UTC-полуночи, а `now` —
+// локальное время рантайма. Считать differenceInCalendarDays напрямую в
+// локальной зоне для отрицательных смещений UTC даёт сдвиг на день. Приводим оба
+// операнда к одному (UTC) календарному кадру перед разностью.
+const toUtcMidnight = (d: Date): Date =>
+  new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+
 /**
  * Очки дедлайна (SCORE-02 + D-04).
  *   - без дедлайна → 0
@@ -57,7 +65,7 @@ const clamp = (value: number, lo: number, hi: number): number =>
  */
 export function deadlinePoints(deadline: Date | null, now: Date): number {
   if (!deadline) return 0;
-  const days = differenceInCalendarDays(deadline, now);
+  const days = differenceInCalendarDays(toUtcMidnight(deadline), toUtcMidnight(now));
   if (days < 0) return 100;
   return clamp(28 - days, -100, 100);
 }

@@ -46,6 +46,27 @@ describe("deadlinePoints (D-04, SCORE-02)", () => {
   it("нижняя граница clamp — не ниже -100 при очень далёком дедлайне", () => {
     expect(deadlinePoints(dayOffset(500), NOW)).toBe(-100);
   });
+
+  // WR-01: `deadline` из <input type="date"> приходит через z.coerce.date() как
+  // UTC-полночь (new Date("2026-08-15")). Разница должна считаться в едином UTC-
+  // кадре, а не в локальной зоне рантайма — иначе для отрицательных смещений UTC
+  // возникает сдвиг на день. Даты ниже — фиксированные UTC-инстанты, поэтому
+  // результат детерминирован независимо от TZ машины, где идут тесты.
+  describe("устойчивость к таймзоне (WR-01)", () => {
+    const utcDate = (iso: string) => new Date(iso); // "YYYY-MM-DD" → UTC-полночь
+
+    it("дедлайн +14 дней (UTC-полночь) → 28 − 14 = 14 в любой TZ", () => {
+      expect(deadlinePoints(utcDate("2026-08-15"), utcDate("2026-08-01"))).toBe(14);
+    });
+
+    it("дедлайн сегодня (обе даты UTC-полночь) → +28", () => {
+      expect(deadlinePoints(utcDate("2026-08-01"), utcDate("2026-08-01"))).toBe(28);
+    });
+
+    it("просроченный на день дедлайн (UTC) → фиксированные +100", () => {
+      expect(deadlinePoints(utcDate("2026-07-31"), utcDate("2026-08-01"))).toBe(100);
+    });
+  });
 });
 
 describe("CATEGORY_POINTS (SCORE-06, SUMMARY.md)", () => {
