@@ -9,7 +9,7 @@ import { Loader2 } from "lucide-react";
 import type { z } from "zod";
 
 import { itemInputSchema, type ItemInput } from "@/lib/validation/item";
-import { createItem } from "@/app/(app)/list/new/actions";
+import { createItem, type CreateItemResult } from "@/app/(app)/list/new/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -112,7 +112,16 @@ export function AddItemForm() {
 
   async function onSubmit(values: ItemInput) {
     setFormError(null);
-    const res = await createItem(values);
+    // createItem может РЕДЖЕКТНУТЬСЯ (истёкшая сессия → requireUser() бросает до
+    // try/catch экшена; сетевой сбой Server Action). Оборачиваем в try/catch,
+    // чтобы показать форм-левел Alert вместо необработанного reject (IN-01).
+    let res: CreateItemResult;
+    try {
+      res = await createItem(values);
+    } catch {
+      setFormError("Не удалось сохранить покупку. Попробуйте ещё раз.");
+      return;
+    }
     if (!res.ok) {
       setFormError(res.error);
       return;
