@@ -29,6 +29,18 @@ describe("itemInputSchema — обязательные поля", () => {
     expect(messageFor(result, "title")).toBe("Заполните это поле");
   });
 
+  it("отклоняет title из одних пробелов (trim перед min, WR-02)", () => {
+    const result = itemInputSchema.safeParse({ ...validBase, title: "   " });
+    expect(result.success).toBe(false);
+    expect(messageFor(result, "title")).toBe("Заполните это поле");
+  });
+
+  it("тримит валидный title (обрезает крайние пробелы)", () => {
+    const result = itemInputSchema.safeParse({ ...validBase, title: "  Молоко  " });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.title).toBe("Молоко");
+  });
+
   it("отклоняет отсутствующую category с текстом «Выберите значение» (ITEM-02)", () => {
     const { category, ...rest } = validBase;
     void category;

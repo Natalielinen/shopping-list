@@ -39,7 +39,7 @@ const optionalDate = z.preprocess(
 );
 
 export const itemInputSchema = z.object({
-  title: z.string().min(1, "Заполните это поле"),
+  title: z.string().trim().min(1, "Заполните это поле"), // trim: строки из пробелов невалидны (WR-02)
   category: z.enum(CATEGORY_VALUES, { message: "Выберите значение" }),
   urgency: z.enum(URGENCY_VALUES, { message: "Выберите значение" }),
   need: z.enum(NEED_VALUES, { message: "Выберите значение" }),
