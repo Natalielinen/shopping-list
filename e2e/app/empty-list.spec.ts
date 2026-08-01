@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
 
-// D-06: авторизованный пользователь видит пустой стейт списка без формы
-// добавления. Тексты — ровно из UI-SPEC Copywriting Contract. Пользователь
-// готовится через API регистрации (авто-вход создаёт сессию).
-test("авторизованный видит пустой стейт без формы добавления", async ({
+// Пустой стейт списка (UI-SPEC §Copywriting): heading «Список пуст» + body +
+// кнопка-ссылка «Добавить покупку» на /list/new (Фаза 2 D-09). Тексты — ровно из
+// UI-SPEC. Пользователь готовится через API регистрации (авто-вход создаёт сессию).
+test("авторизованный видит пустой стейт с кнопкой «Добавить покупку»", async ({
   page,
 }) => {
   const email = `empty-${Date.now()}@example.com`;
@@ -18,12 +18,14 @@ test("авторизованный видит пустой стейт без ф�
 
   await expect(page.getByRole("heading", { name: "Список пуст" })).toBeVisible();
   await expect(
-    page.getByText("Скоро здесь можно будет добавлять покупки.")
+    page.getByText("Добавьте первую покупку — она сразу получит приоритет.")
   ).toBeVisible();
 
-  // Формы/кнопки добавления в Фазе 1 нет.
-  await expect(
-    page.getByRole("button", { name: /добав/i })
-  ).toHaveCount(0);
+  // Пустой стейт содержит вход на форму добавления (ссылка-кнопка на /list/new).
+  const addLink = page.getByRole("link", { name: "Добавить покупку" });
+  await expect(addLink).toBeVisible();
+  await expect(addLink).toHaveAttribute("href", "/list/new");
+
+  // Самих полей формы на /list нет — форма живёт на отдельной странице /list/new.
   await expect(page.getByRole("textbox")).toHaveCount(0);
 });
