@@ -422,16 +422,18 @@ export function priorityLevel(total: number): "high" | "medium" | "low" {
 | A4 | Radix Select клик-flow лучше покрывать Playwright, а не RTL | Pitfall 9 / Validation | MEDIUM — зависит от jsdom-шимов; если шимы добавлены, RTL справится |
 | A5 | Английские идентификаторы enum-значений (`vital`, `savesResources`, …) | Code Examples | LOW — русские тексты в UI приходят из label-мапы; ключи — на усмотрение планировщика |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Ключи enum vs отображаемые русские тексты**
    - Что знаем: UI-тексты пунктов — русские, из SUMMARY/D-01..D-03 (единый источник).
    - Что неясно: хранить ли в БД английские ключи (`vital`) или русские строки.
    - Рекомендация: английские ключи в схеме/БД + отдельная label-мапа `ключ → русский текст` для Select и разбивки (устойчивее к переименованию текстов, реверсивно).
+   - **RESOLVED:** принято планировщиком — английские enum-ключи + label-мапа (планы 02-01/02-02).
 
 2. **`price` формат хранения (integer-копейки vs numeric)**
    - Что знаем: display-only, на очки не влияет; ввод `inputMode="decimal"`.
    - Рекомендация: `integer` в копейках (без float-погрешностей) — но это Claude's Discretion.
+   - **RESOLVED:** формат хранения `price`/`monthlyPayment` — Claude's Discretion планировщика (не влияет на цель фазы; display-only).
 
 ## Environment Availability
 

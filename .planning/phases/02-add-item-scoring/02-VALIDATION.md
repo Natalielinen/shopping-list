@@ -57,7 +57,7 @@ created: 2026-08-01
 | TBD | TBD | TBD | ITEM-01 / AUTH-04 | T-2-xx | `createItemForUser` пишет со scoping по `userId`; изоляция | integration (real test DB) | `npx vitest run src/server/repos/items.iso.test.ts` | ⚠ расширить | ⬜ pending |
 | TBD | TBD | TBD | ITEM-02/04 | — | форма: Select-ы, условный `monthlyPayment`, pending-состояние | component (RTL) | `npx vitest run src/components/items/AddItemForm.test.tsx` | ❌ W0 | ⬜ pending |
 | TBD | TBD | TBD | LIST-07 | — | разбивка раскрывается (Collapsible) | component (RTL) | `npx vitest run src/components/items/ScoreBreakdown.test.tsx` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | ITEM-01/D-09/D-12/LIST-06 | T-2-xx | add → redirect → badge → сортировка по убыванию | e2e (Playwright) | `npx playwright test e2e/add-item.spec.ts` | ❌ W0 | ⬜ pending |
+| TBD | TBD | TBD | ITEM-01/D-09/D-12/LIST-06 | T-2-xx | add → redirect → badge → сортировка по убыванию | e2e (Playwright) | `npx playwright test e2e/app/add-item.spec.ts` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -72,7 +72,7 @@ created: 2026-08-01
 - [ ] `src/lib/validation/item.test.ts` — покрывает ITEM-01..05 (зеркало `auth.test.ts`)
 - [ ] Расширить `tests/helpers/db.ts` `seedItem` под новые NOT NULL / defaulted колонки
 - [ ] `vitest.setup.ts` — шимы `hasPointerCapture` / `scrollIntoView` / `ResizeObserver` для Radix Select в RTL
-- [ ] `src/components/items/AddItemForm.test.tsx`, e2e `e2e/add-item.spec.ts`
+- [ ] `src/components/items/AddItemForm.test.tsx`, e2e `e2e/app/add-item.spec.ts`
 
 ---
 
