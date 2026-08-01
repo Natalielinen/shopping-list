@@ -5,15 +5,15 @@ milestone_name: milestone
 current_phase: 2
 current_phase_name: Добавление покупок с автоматическим приоритетом
 status: executing
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-08-01T07:36:50.227Z"
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-08-01T07:47:16.654Z"
 last_activity: 2026-08-01
 last_activity_desc: Phase 2 execution started
 progress:
   total_phases: 2
   completed_phases: 1
   total_plans: 9
-  completed_plans: 5
+  completed_plans: 6
 ---
 
 # Project State
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-08-01)
 ## Current Position
 
 Phase: 2 (Добавление покупок с автоматическим приоритетом) — EXECUTING
-Plan: 2 of 5
+Plan: 3 of 5
 Status: Ready to execute
 Last activity: 2026-08-01 — Phase 2 execution started
 
-Progress: [██████░░░░] 56%
+Progress: [███████░░░] 67%
 
 ## Performance Metrics
 
@@ -62,6 +62,7 @@ Progress: [██████░░░░] 56%
 | Phase 01 P03 | 21min | 2 tasks | 22 files |
 | Phase 01 P04 | 5 | 2 tasks | 8 files |
 | Phase 02 P01 | 5 | 2 tasks | 4 files |
+| Phase 02 P02 | 12min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -77,6 +78,9 @@ Recent decisions affecting current work:
 - [Phase ?]: 01-03: e2e через Playwright с приложением на DATABASE_URL_TEST; readiness-проба по /register (не / из-за 307)
 - [Phase ?]: 01-04: контур auth замкнут — LogoutButton (signOut -> /login, D-09/AUTH-03) + mapAuthError с enumeration-guard на входе (V7); изоляция подтверждена e2e на двух пользователях (AUTH-04)
 - [Phase ?]: [02-01] Чистый движок подсчёта: now:Date внедряется, просрочка=+100 ДО clamp (D-04), exhaustive Record-шкалы (vital=12), 57 юнит-тестов зелёные (TDD RED→GREEN)
+- [Phase ?]: Деньги (price/monthlyPayment) хранятся как integer-копейки (Pitfall 10, без float-ошибок)
+- [Phase ?]: deadline — date(mode:date) без TZ, чтобы вклад срока не сдвигался на день (Pitfall 4)
+- [Phase ?]: total/deadlinePoints не хранятся в items (SCORE-05 — считаются на чтении)
 
 ### Pending Todos
 
@@ -101,6 +105,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-01T07:36:40.982Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-08-01T07:47:08.602Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None

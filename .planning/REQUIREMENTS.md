@@ -16,11 +16,11 @@
 
 ### Item Management (CRUD)
 
-- [ ] **ITEM-01**: Пользователь может добавить покупку через форму; поле title обязательно
-- [ ] **ITEM-02**: Пользователь выбирает обязательные category, urgency, need, benefit из выпадающих списков
-- [ ] **ITEM-03**: Пользователь может заполнить необязательные поля: link, description, price, deadline
-- [ ] **ITEM-04**: Пользователь может отметить isCredit; при isCredit=true показывается необязательное поле monthlyPayment
-- [ ] **ITEM-05**: Пользователь может выставить doubts (по умолчанию — нет сомнений)
+- [x] **ITEM-01**: Пользователь может добавить покупку через форму; поле title обязательно
+- [x] **ITEM-02**: Пользователь выбирает обязательные category, urgency, need, benefit из выпадающих списков
+- [x] **ITEM-03**: Пользователь может заполнить необязательные поля: link, description, price, deadline
+- [x] **ITEM-04**: Пользователь может отметить isCredit; при isCredit=true показывается необязательное поле monthlyPayment
+- [x] **ITEM-05**: Пользователь может выставить doubts (по умолчанию — нет сомнений)
 - [ ] **ITEM-06**: Пользователь может указать зависимость (depends) от другой своей покупки
 - [ ] **ITEM-07**: Пользователь может редактировать свою покупку
 - [ ] **ITEM-08**: Пользователь может удалить свою покупку
@@ -89,11 +89,11 @@
 | AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 1 | Complete |
 | AUTH-04 | Phase 1 | Complete |
-| ITEM-01 | Phase 2 | Pending |
-| ITEM-02 | Phase 2 | Pending |
-| ITEM-03 | Phase 2 | Pending |
-| ITEM-04 | Phase 2 | Pending |
-| ITEM-05 | Phase 2 | Pending |
+| ITEM-01 | Phase 2 | Complete |
+| ITEM-02 | Phase 2 | Complete |
+| ITEM-03 | Phase 2 | Complete |
+| ITEM-04 | Phase 2 | Complete |
+| ITEM-05 | Phase 2 | Complete |
 | SCORE-01 | Phase 2 | Complete |
 | SCORE-02 | Phase 2 | Complete |
 | SCORE-03 | Phase 2 | Complete |
