@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/server/auth/current-user";
 import { findItemsForUser } from "@/server/repos/items";
-import { computeTotal } from "@/lib/scoring/scoring";
+import { computeBreakdown, computeTotal } from "@/lib/scoring/scoring";
 import { Button } from "@/components/ui/button";
 import { ItemCard } from "@/components/items/ItemCard";
 
@@ -36,9 +36,16 @@ export default async function ListPage() {
     );
   }
 
+  // Единый `now` на прогон: и total, и разбивка считаются ОДНОЙ датой, поэтому
+  // сумма знаковых строк разбивки (LIST-07) провабельно равна total в badge
+  // (LIST-06). Второй new Date() ниже по дереву запрещён (см. ItemCard/ScoreBreakdown).
   const now = new Date();
   const scored = rows
-    .map((item) => ({ item, total: computeTotal(item, now) }))
+    .map((item) => ({
+      item,
+      total: computeTotal(item, now),
+      breakdown: computeBreakdown(item, now),
+    }))
     .sort(
       (a, b) =>
         b.total - a.total ||
@@ -47,9 +54,9 @@ export default async function ListPage() {
 
   return (
     <ul className="flex flex-col gap-4 px-4 py-6">
-      {scored.map(({ item, total }) => (
+      {scored.map(({ item, total, breakdown }) => (
         <li key={item.id}>
-          <ItemCard title={item.title} total={total} />
+          <ItemCard title={item.title} total={total} breakdown={breakdown} />
         </li>
       ))}
     </ul>
