@@ -4,16 +4,16 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 2
 current_phase_name: Добавление покупок с автоматическим приоритетом
-status: executing
-stopped_at: Completed 02-04-PLAN.md
-last_updated: "2026-08-01T08:22:18.732Z"
+status: verifying
+stopped_at: Completed 02-05-PLAN.md
+last_updated: "2026-08-01T08:29:21.602Z"
 last_activity: 2026-08-01
 last_activity_desc: Phase 2 execution started
 progress:
   total_phases: 2
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 9
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # Project State
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-08-01)
 
 Phase: 2 (Добавление покупок с автоматическим приоритетом) — EXECUTING
 Plan: 5 of 5
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-08-01 — Phase 2 execution started
 
-Progress: [█████████░] 89%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -65,6 +65,7 @@ Progress: [█████████░] 89%
 | Phase 02 P02 | 12min | 2 tasks | 7 files |
 | Phase 02 P03 | 21min | 2 tasks | 15 files |
 | Phase 02 P04 | 7min | 2 tasks | 3 files |
+| Phase 02 P05 | 12min | 1 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -87,6 +88,7 @@ Recent decisions affecting current work:
 - [Phase ?]: router.refresh() ДО router.push() — обратный порядок отменял навигацию после Server Action
 - [Phase ?]: monthlyPayment всегда optional в схеме; условна только видимость поля по isCredit (Pitfall 6), с очисткой setValue(undefined) при снятии
 - [Phase ?]: AppHeader остаётся серверным компонентом: кнопка «Добавить» — навигационная ссылка (Link + Button asChild), D-08
+- [Phase ?]: [02-05] ScoreBreakdown (LIST-07): client-leaf Collapsible, свёрнут по умолчанию; shared-now — breakdown и total считаются одним now в RSC-родителе (list/page.tsx), листья без new Date → сумма разбивки == total
 
 ### Pending Todos
 
@@ -111,6 +113,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-01T08:22:11.321Z
-Stopped at: Completed 02-04-PLAN.md
+Last session: 2026-08-01T08:29:14.380Z
+Stopped at: Completed 02-05-PLAN.md
 Resume file: None
