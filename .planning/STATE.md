@@ -23,7 +23,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-01)
 
 **Core value:** Пользователь видит свои покупки автоматически отсортированными по осмысленному приоритету, чтобы понимать, что покупать в первую очередь.
-**Current focus:** Phase 2 — Добавление покупок с автоматическим приоритетом
+**Current focus:** Phase 3 — Редактирование и удаление покупок
 
 ## Current Position
 
@@ -101,8 +101,9 @@ None yet.
 
 [Issues that affect future work]
 
-- [Phase 2 readiness]: Перед подсчётом очков подтвердить незакрытые значения шкал — «Жизненно важно» (urgency), полный DoubtsType и BenefitType (source of truth — SUMMARY.md); закрепить exhaustive Record<Enum,number> без `?? 0`.
-- [Phase 2 constraint]: Часовой пояс границы дня для daysUntil(deadline, now) — пользователь UTC+3; зафиксировать при планировании.
+- ✓ Resolved (Phase 2): значения шкал закрыты — «Жизненно важно»=12 (D-03), DoubtsType 0/−1/−3, BenefitType по SUMMARY; exhaustive Record<Enum,number> без `?? 0`.
+- ✓ Resolved (Phase 2): часовой пояс границы дня — `deadlinePoints` нормализует deadline и `now` к UTC-полуночи перед `differenceInCalendarDays` (WR-01).
+- None open for Phase 3.
 
 ## Deferred Items
 
@@ -114,6 +115,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-01T08:29:14.380Z
-Stopped at: Completed 02-05-PLAN.md
+Last session: 2026-08-01
+Stopped at: Phase 2 complete (verified, secured, UAT passed) — ready to plan Phase 3
 Resume file: None
