@@ -27,12 +27,12 @@
 
 ### Scoring Engine
 
-- [ ] **SCORE-01**: total считается как простая сумма всех очковых полей (category + urgency + need + benefit + deadlinePoints + doubts + штраф за кредит)
-- [ ] **SCORE-02**: deadlinePoints = clamp(28 − дни_до_дедлайна, −100, 100); без дедлайна = 0
-- [ ] **SCORE-03**: isCredit=true вычитает 2 очка из total
-- [ ] **SCORE-04**: doubts вычитает очки: нет (0), лёгкие (−1), сильные (−3)
-- [ ] **SCORE-05**: total вычисляется на чтении и отражает текущую дату (не «замораживается» при создании)
-- [ ] **SCORE-06**: Шкалы очков category/urgency/need/benefit фиксированы согласно SUMMARY (единый источник)
+- [x] **SCORE-01**: total считается как простая сумма всех очковых полей (category + urgency + need + benefit + deadlinePoints + doubts + штраф за кредит)
+- [x] **SCORE-02**: deadlinePoints = clamp(28 − дни_до_дедлайна, −100, 100); без дедлайна = 0
+- [x] **SCORE-03**: isCredit=true вычитает 2 очка из total
+- [x] **SCORE-04**: doubts вычитает очки: нет (0), лёгкие (−1), сильные (−3)
+- [x] **SCORE-05**: total вычисляется на чтении и отражает текущую дату (не «замораживается» при создании)
+- [x] **SCORE-06**: Шкалы очков category/urgency/need/benefit фиксированы согласно SUMMARY (единый источник)
 
 ### List, Sort, Filter & Archive
 
@@ -41,8 +41,8 @@
 - [ ] **LIST-03**: Пользователь может сортировать по алфавиту
 - [ ] **LIST-04**: Пользователь может отметить покупку купленной (completed); купленные уходят в архив
 - [ ] **LIST-05**: Фильтр «показывать купленные» включает архивные покупки в общий список
-- [ ] **LIST-06**: Каждая покупка показывает badge с приоритетом (с меткой/цветом, доступно для восприятия)
-- [ ] **LIST-07**: Каждая покупка показывает разбивку приоритета (какие поля сколько очков дали)
+- [x] **LIST-06**: Каждая покупка показывает badge с приоритетом (с меткой/цветом, доступно для восприятия)
+- [x] **LIST-07**: Каждая покупка показывает разбивку приоритета (какие поля сколько очков дали)
 - [ ] **LIST-08**: Интерфейс адаптивный, mobile-first
 
 ### Dependencies / Blocking
@@ -94,14 +94,14 @@
 | ITEM-03 | Phase 2 | Pending |
 | ITEM-04 | Phase 2 | Pending |
 | ITEM-05 | Phase 2 | Pending |
-| SCORE-01 | Phase 2 | Pending |
-| SCORE-02 | Phase 2 | Pending |
-| SCORE-03 | Phase 2 | Pending |
-| SCORE-04 | Phase 2 | Pending |
-| SCORE-05 | Phase 2 | Pending |
-| SCORE-06 | Phase 2 | Pending |
-| LIST-06 | Phase 2 | Pending |
-| LIST-07 | Phase 2 | Pending |
+| SCORE-01 | Phase 2 | Complete |
+| SCORE-02 | Phase 2 | Complete |
+| SCORE-03 | Phase 2 | Complete |
+| SCORE-04 | Phase 2 | Complete |
+| SCORE-05 | Phase 2 | Complete |
+| SCORE-06 | Phase 2 | Complete |
+| LIST-06 | Phase 2 | Complete |
+| LIST-07 | Phase 2 | Complete |
 | ITEM-07 | Phase 3 | Pending |
 | ITEM-08 | Phase 3 | Pending |
 | LIST-01 | Phase 4 | Pending |
