@@ -38,6 +38,14 @@ const optionalDate = z.preprocess(
   z.coerce.date().optional()
 );
 
+// Хелпер: необязательная строка (описание) — пустая или из одних пробелов →
+// undefined, чтобы в БД попадал NULL, а не "" (IN-02, консистентно с прочими
+// nullable-полями).
+const optionalText = z.preprocess(
+  (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
+  z.string().optional()
+);
+
 export const itemInputSchema = z.object({
   title: z.string().trim().min(1, "Заполните это поле"), // trim: строки из пробелов невалидны (WR-02)
   category: z.enum(CATEGORY_VALUES, { message: "Выберите значение" }),
@@ -45,7 +53,7 @@ export const itemInputSchema = z.object({
   need: z.enum(NEED_VALUES, { message: "Выберите значение" }),
   benefit: z.enum(BENEFIT_VALUES, { message: "Выберите значение" }),
   link: optionalUrl,
-  description: z.string().optional(),
+  description: optionalText,
   price: optionalNumber,
   deadline: optionalDate,
   doubts: z.enum(DOUBTS_VALUES).default("sure"), // ITEM-05 / D-01

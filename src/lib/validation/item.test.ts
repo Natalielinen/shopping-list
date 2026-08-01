@@ -175,6 +175,29 @@ describe("itemInputSchema — doubts (ITEM-05, D-01)", () => {
   });
 });
 
+describe("itemInputSchema — description (IN-02)", () => {
+  it("превращает пустую строку в undefined (в БД → NULL, не «»)", () => {
+    const result = itemInputSchema.safeParse({ ...validBase, description: "" });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.description).toBeUndefined();
+  });
+
+  it("превращает строку из одних пробелов в undefined", () => {
+    const result = itemInputSchema.safeParse({ ...validBase, description: "   " });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.description).toBeUndefined();
+  });
+
+  it("сохраняет непустое описание", () => {
+    const result = itemInputSchema.safeParse({
+      ...validBase,
+      description: "Домашнее",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.description).toBe("Домашнее");
+  });
+});
+
 describe("itemInputSchema — полные payload'ы", () => {
   it("принимает payload только с обязательными полями", () => {
     const result = itemInputSchema.safeParse(validBase);
