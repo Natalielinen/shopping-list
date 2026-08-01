@@ -5,18 +5,21 @@ import { createItemForUser, findItemsForUser } from "@/server/repos/items";
 
 import { closeTestDb, resetDb, seedItem, seedUser } from "../../../tests/helpers/db";
 
+// Хуки уровня файла: тестовая БД разделяет один module-level postgres-клиент, поэтому
+// закрывать его нужно РОВНО один раз после всех блоков (иначе первый afterAll рвёт
+// соединение для последующих describe → CONNECTION_ENDED).
+beforeEach(async () => {
+  await resetDb();
+});
+
+afterAll(async () => {
+  await closeTestDb();
+});
+
 // Якорь изоляции AUTH-04 / критерий успеха №4. Тест бьёт по РЕАЛЬНОЙ тестовой
 // Postgres (DATABASE_URL_TEST), а не по замоканному ORM (Pitfall 2): только так
 // проверяется, что WHERE user_id = ? действительно изолирует данные.
-describe("findItemsForUser — изоляция данных по userId (AUTH-04)", () => {
-  beforeEach(async () => {
-    await resetDb();
-  });
-
-  afterAll(async () => {
-    await closeTestDb();
-  });
-
+describe("findItemsForUser — изоляция чтения по userId (AUTH-04)", () => {
   it("пользователь B не видит покупки пользователя A", async () => {
     const a = await seedUser("a@test.dev");
     const b = await seedUser("b@test.dev");
@@ -36,14 +39,6 @@ describe("findItemsForUser — изоляция данных по userId (AUTH-0
 // .values() — чужой список недостижим, mass-assignment userId из payload не
 // проходит.
 describe("createItemForUser — изоляция записи по userId (AUTH-04 / Security V4)", () => {
-  beforeEach(async () => {
-    await resetDb();
-  });
-
-  afterAll(async () => {
-    await closeTestDb();
-  });
-
   const baseData = {
     title: "A-created",
     category: "home",

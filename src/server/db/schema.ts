@@ -1,11 +1,21 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
+  date,
   index,
+  integer,
   pgTable,
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
+
+import type {
+  BenefitType,
+  CategoryType,
+  DoubtsType,
+  NeedType,
+  UrgencyType,
+} from "@/lib/scoring/scales";
 
 // Схема БД Фазы 1.
 //
@@ -122,9 +132,31 @@ export const items = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
     title: text("title").notNull(),
+    // Очковые enum-поля (Фаза 2). Ключи английские (scales.ts — единый источник),
+    // русские подписи живут в label-мапе UI-слоя. `$type` привязывает колонку к
+    // union-типу шкалы: компилятор ловит невалидные ключи на вставке.
+    category: text("category").$type<CategoryType>().notNull(),
+    urgency: text("urgency").$type<UrgencyType>().notNull(),
+    need: text("need").$type<NeedType>().notNull(),
+    benefit: text("benefit").$type<BenefitType>().notNull(),
+    // ITEM-05 / D-01: по умолчанию «нет сомнений».
+    doubts: text("doubts").$type<DoubtsType>().notNull().default("sure"),
+    // ITEM-04: покупка в кредит; условная лишь видимость monthlyPayment в UI.
+    isCredit: boolean("is_credit").notNull().default(false),
+    // Необязательные поля покупки (nullable — не ломают существующие строки).
+    link: text("link"),
+    description: text("description"),
+    // Pitfall 4: дата без времени/TZ, чтобы вклад срока не сдвигался на день.
+    deadline: date("deadline", { mode: "date" }),
+    // Pitfall 10: деньги как integer-копейки (без float-ошибок, numeric→string).
+    // Display-only, на очки не влияют.
+    price: integer("price"),
+    monthlyPayment: integer("monthly_payment"),
     createdAt: timestamp("created_at")
       .$defaultFn(() => new Date())
       .notNull(),
+    // ПРИМЕЧАНИЕ: вычисляемые очки (сумма и вклад дедлайна) НЕ хранятся
+    // (SCORE-05) — считаются на чтении из текущей даты.
   },
   (table) => [index("items_user_id_idx").on(table.userId)]
 );
@@ -132,3 +164,8 @@ export const items = pgTable(
 export type User = typeof user.$inferSelect;
 export type Item = typeof items.$inferSelect;
 export type NewItem = typeof items.$inferInsert;
+
+// Данные для вставки покупки: поля покупки без серверно-управляемых id/userId/
+// createdAt. `userId` подмешивается репозиторием из сессии (никогда из payload —
+// mass-assignment, Security V4).
+export type ItemInsertData = Omit<NewItem, "id" | "userId" | "createdAt">;

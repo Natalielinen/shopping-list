@@ -52,16 +52,32 @@ export async function seedUser(email: string): Promise<{ id: string }> {
   return { id };
 }
 
-// Вставляет строку в таблицу `items` для указанного пользователя.
+// Вставляет строку в таблицу `items` для указанного пользователя. Новые NOT NULL
+// enum-колонки (Фаза 2) получают валидные ключи по умолчанию, чтобы существующий
+// тест read-изоляции не сломался; вызывающий может переопределить любое поле.
 export async function seedItem(
   userId: string,
-  fields: { title: string }
+  fields: {
+    title: string;
+    category?: string;
+    urgency?: string;
+    need?: string;
+    benefit?: string;
+    doubts?: string;
+    isCredit?: boolean;
+  }
 ): Promise<{ id: string }> {
   const id = randomUUID();
   await testDb.insert(items).values({
     id,
     userId,
     title: fields.title,
+    category: (fields.category ?? "home") as never,
+    urgency: (fields.urgency ?? "urgent") as never,
+    need: (fields.need ?? "needed") as never,
+    benefit: (fields.benefit ?? "savesResources") as never,
+    doubts: (fields.doubts ?? "sure") as never,
+    isCredit: fields.isCredit ?? false,
     createdAt: new Date(),
   });
   return { id };
