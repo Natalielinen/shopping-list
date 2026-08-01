@@ -67,7 +67,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Дедлайн даёт clamp(28 − дней_до_дедлайна, −100, 100) очков (0 без дедлайна), и total покупки отражает сегодняшнюю дату при каждом просмотре (не «замораживается» при создании).
   5. Кредит вычитает 2 очка, а doubts — 0 / −1 / −3, по фиксированным шкалам category/urgency/need/benefit из SUMMARY.
 
-**Plans**: 3/5 plans executed
+**Plans**: 4/5 plans executed
 **Wave 1**
 
 - [x] 02-01-PLAN.md — Инфраструктура (date-fns, test-скрипты) + чистый движок подсчёта очков (TDD): scales, deadlinePoints, computeTotal/computeBreakdown, priorityLevel
@@ -82,7 +82,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 02-04-PLAN.md — Полная форма (необязательные поля, isCredit/monthlyPayment, doubts) + кнопка входа «Добавить» в шапке
+- [x] 02-04-PLAN.md — Полная форма (необязательные поля, isCredit/monthlyPayment, doubts) + кнопка входа «Добавить» в шапке
 - [ ] 02-05-PLAN.md — Разбивка очков по тапу (Collapsible) на карточке
 
 **UI hint**: yes
@@ -142,7 +142,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Фундамент и аутентификация | 4/4 | Complete    | 2026-08-01 |
-| 2. Добавление покупок с автоматическим приоритетом | 3/5 | In Progress|  |
+| 2. Добавление покупок с автоматическим приоритетом | 4/5 | In Progress|  |
 | 3. Редактирование и удаление покупок | 0/TBD | Not started | - |
 | 4. Список — сортировка, фильтры и архив | 0/TBD | Not started | - |
 | 5. Зависимости и блокировка | 0/TBD | Not started | - |

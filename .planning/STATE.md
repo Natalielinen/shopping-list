@@ -5,15 +5,15 @@ milestone_name: milestone
 current_phase: 2
 current_phase_name: Добавление покупок с автоматическим приоритетом
 status: executing
-stopped_at: Completed 02-03-PLAN.md
-last_updated: "2026-08-01T08:13:52.678Z"
+stopped_at: Completed 02-04-PLAN.md
+last_updated: "2026-08-01T08:22:18.732Z"
 last_activity: 2026-08-01
 last_activity_desc: Phase 2 execution started
 progress:
   total_phases: 2
   completed_phases: 1
   total_plans: 9
-  completed_plans: 7
+  completed_plans: 8
 ---
 
 # Project State
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-08-01)
 ## Current Position
 
 Phase: 2 (Добавление покупок с автоматическим приоритетом) — EXECUTING
-Plan: 4 of 5
+Plan: 5 of 5
 Status: Ready to execute
 Last activity: 2026-08-01 — Phase 2 execution started
 
-Progress: [████████░░] 78%
+Progress: [█████████░] 89%
 
 ## Performance Metrics
 
@@ -64,6 +64,7 @@ Progress: [████████░░] 78%
 | Phase 02 P01 | 5 | 2 tasks | 4 files |
 | Phase 02 P02 | 12min | 2 tasks | 7 files |
 | Phase 02 P03 | 21min | 2 tasks | 15 files |
+| Phase 02 P04 | 7min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -84,6 +85,8 @@ Recent decisions affecting current work:
 - [Phase ?]: total/deadlinePoints не хранятся в items (SCORE-05 — считаются на чтении)
 - [Phase ?]: createItem не редиректит — возвращает { ok }; навигация на клиенте (D-09, Pitfall 7)
 - [Phase ?]: router.refresh() ДО router.push() — обратный порядок отменял навигацию после Server Action
+- [Phase ?]: monthlyPayment всегда optional в схеме; условна только видимость поля по isCredit (Pitfall 6), с очисткой setValue(undefined) при снятии
+- [Phase ?]: AppHeader остаётся серверным компонентом: кнопка «Добавить» — навигационная ссылка (Link + Button asChild), D-08
 
 ### Pending Todos
 
@@ -108,6 +111,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-01T08:13:45.359Z
-Stopped at: Completed 02-03-PLAN.md
+Last session: 2026-08-01T08:22:11.321Z
+Stopped at: Completed 02-04-PLAN.md
 Resume file: None
