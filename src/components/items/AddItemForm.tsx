@@ -12,6 +12,8 @@ import { itemInputSchema, type ItemInput } from "@/lib/validation/item";
 import { createItem } from "@/app/(app)/list/new/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Select,
@@ -85,17 +87,28 @@ const BENEFIT_OPTIONS: ReadonlyArray<[ItemInput["benefit"], string]> = [
   ["overpriced", "Тратит больше, чем стоит"],
 ];
 
+const DOUBTS_OPTIONS: ReadonlyArray<[ItemInput["doubts"], string]> = [
+  ["sure", "Уверен(а)"], // 0 очков (D-01) — default
+  ["doubt", "Сомневаюсь"], // −1
+  ["strongDoubt", "Сильно сомневаюсь"], // −3
+];
+
 export function AddItemForm() {
   const router = useRouter();
   const [formError, setFormError] = useState<string | null>(null);
 
   const form = useForm<ItemFormInput, unknown, ItemInput>({
     resolver: zodResolver(itemInputSchema),
-    defaultValues: { title: "" },
+    // doubts/isCredit заданы явно (не полагаемся на schema `.default()` для
+    // первого рендера): Select сразу показывает «Уверен(а)», чекбокс — снят.
+    defaultValues: { title: "", doubts: "sure", isCredit: false },
     mode: "onSubmit",
   });
 
   const isPending = form.formState.isSubmitting;
+  // Видимость monthlyPayment зависит от чекбокса isCredit (ITEM-04). watch
+  // подписывает компонент на изменение значения → условный рендер ниже.
+  const isCredit = form.watch("isCredit");
 
   async function onSubmit(values: ItemInput) {
     setFormError(null);
@@ -243,6 +256,162 @@ export function AddItemForm() {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="link"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Ссылка</FormLabel>
+              <FormControl>
+                <Input
+                  type="url"
+                  inputMode="url"
+                  autoComplete="off"
+                  placeholder="https://"
+                  className="h-11 text-base"
+                  {...field}
+                  value={(field.value as string | undefined) ?? ""}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Описание</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Заметка о покупке"
+                  className="text-base"
+                  {...field}
+                  value={(field.value as string | undefined) ?? ""}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="price"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Цена</FormLabel>
+              <FormControl>
+                <Input
+                  inputMode="decimal"
+                  autoComplete="off"
+                  placeholder="0"
+                  className="h-11 text-base"
+                  {...field}
+                  value={(field.value as string | undefined) ?? ""}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="deadline"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Срок</FormLabel>
+              <FormControl>
+                <Input
+                  type="date"
+                  className="h-11 text-base"
+                  {...field}
+                  value={(field.value as string | undefined) ?? ""}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="doubts"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Сомнения</FormLabel>
+              <Select defaultValue={field.value} onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger className="h-11 w-full text-base">
+                    <SelectValue placeholder="Выберите значение" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {DOUBTS_OPTIONS.map(([value, label]) => (
+                    <SelectItem key={value} value={value} className="text-base">
+                      {label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="isCredit"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center gap-3 space-y-0">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={(checked) => {
+                    field.onChange(checked);
+                    // Pitfall 6: при снятии isCredit скрытое поле monthlyPayment
+                    // очищается, чтобы submit не отправил ранее введённое число.
+                    if (!checked) {
+                      form.setValue("monthlyPayment", undefined);
+                    }
+                  }}
+                />
+              </FormControl>
+              <FormLabel className="!mt-0 cursor-pointer">
+                Покупка в кредит
+              </FormLabel>
+            </FormItem>
+          )}
+        />
+
+        {/* Условная видимость monthlyPayment (ITEM-04): рендерится только при
+            isCredit; поле схемы всегда optional (условна лишь видимость). */}
+        {isCredit ? (
+          <FormField
+            control={form.control}
+            name="monthlyPayment"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Ежемесячный платёж</FormLabel>
+                <FormControl>
+                  <Input
+                    inputMode="decimal"
+                    autoComplete="off"
+                    placeholder="0"
+                    className="h-11 text-base"
+                    {...field}
+                    value={(field.value as string | undefined) ?? ""}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ) : null}
 
         <div className="mt-2 grid gap-3">
           <Button

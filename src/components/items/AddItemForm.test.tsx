@@ -73,7 +73,8 @@ describe("AddItemForm", () => {
 
   it("doubts по умолчанию «Уверен(а)»", () => {
     render(<AddItemForm />);
-    expect(screen.getByText("Уверен(а)")).toBeInTheDocument();
+    // Триггер Select «Сомнения» отображает выбранное значение по умолчанию.
+    expect(screen.getByLabelText("Сомнения")).toHaveTextContent("Уверен(а)");
   });
 
   it("поле «Ежемесячный платёж» появляется только при isCredit и скрывается при снятии", async () => {
