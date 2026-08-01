@@ -21,13 +21,12 @@ Web-приложение (mobile-first) для составления списк
 
 <!-- Shipped and confirmed valuable. -->
 
-(Пока нет — валидируется поставкой)
+- ✓ Пользователь может зарегистрироваться, войти и выйти (email/пароль); данные изолированы по пользователю (AUTH-01..04) — Phase 1
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] Пользователь может зарегистрироваться и войти (email/пароль); данные привязаны к пользователю
 - [ ] Пользователь может добавить покупку через форму (title обязателен)
 - [ ] Пользователь выбирает category, urgency, need, benefit из выпадающих списков (обязательные, дают очки)
 - [ ] Пользователь может указать необязательные поля: link, description, price, deadline, doubts, isCredit (+ monthlyPayment), depends
@@ -74,7 +73,7 @@ Web-приложение (mobile-first) для составления списк
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Next.js full-stack (API routes) + PostgreSQL | Один язык (TS), меньше инфраструктуры для mobile-first web | — Pending |
-| Мультипользовательский с авторизацией email/пароль | Списками пользуются несколько человек, у каждого свой | — Pending |
+| Мультипользовательский с авторизацией email/пароль | Списками пользуются несколько человек, у каждого свой | ✓ Phase 1 — Better Auth (Argon2id, DB-сессии 30 дней), шов изоляции userId доказан двухпользовательским тестом (AUTH-04) |
 | total = простая сумма всех очковых полей | Прозрачность и предсказуемость приоритета | — Pending |
 | deadlinePoints = 28 − дни_до_дедлайна, без дедлайна = 0, clamp [−100,100] | Единая формула, совпадает с примером из SUMMARY | — Pending |
 | isCredit вычитает −2 очка | Умеренный штраф, сопоставим с «тратит больше чем стоит» | — Pending |
@@ -101,4 +100,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-26 after initialization*
+*Last updated: 2026-08-01 after Phase 1*
