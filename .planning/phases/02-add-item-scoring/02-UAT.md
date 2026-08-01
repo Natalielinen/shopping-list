@@ -1,43 +1,41 @@
 ---
-status: testing
+status: complete
 phase: 02-add-item-scoring
 source: [02-VERIFICATION.md]
 started: 2026-08-01T08:59:33Z
-updated: 2026-08-01T08:59:33Z
+updated: 2026-08-01T09:12:00Z
 ---
 
 ## Current Test
 
-number: 1
-name: Badge при трёхзначном total держится в одну строку (375px)
-expected: |
-  Badge (иконка + метка «Высокий» + число) не переносится на вторую строку и не выталкивает заголовок; карточка сохраняет форму.
-awaiting: user response
+[testing complete]
 
 ## Tests
 
 ### 1. Badge при трёхзначном total (375px)
 steps: На вьюпорте 375px открыть карточку покупки с трёхзначным total (напр. просроченный дедлайн → total ≥ 100). Проверить badge.
 expected: Badge (иконка + метка «Высокий» + число) не переносится на вторую строку и не выталкивает заголовок; карточка сохраняет форму.
-result: [pending]
+result: pass
 
 ### 2. Длинное название покупки (375px)
 steps: На вьюпорте 375px создать покупку с очень длинным названием (60+ символов без пробелов) и открыть список.
 expected: Длинное название усекается (truncate/min-w-0) и не выталкивает badge приоритета за пределы карточки; раскладка карточки не ломается.
-result: [pending]
+result: pass
 
 ### 3. Полная разбивка очков без клиппинга (375px)
 steps: На вьюпорте 375px раскрыть полную разбивку очков у покупки со всеми полями + isCredit (до 7 строк вкладов + «Итого»).
 expected: Все строки разбивки и «Итого» видны полностью, без обрезки/горизонтального переполнения на узком мобильном экране.
-result: [pending]
+result: pass
 
 ## Summary
 
 total: 3
-passed: 0
+passed: 3
 issues: 0
-pending: 3
+pending: 0
 skipped: 0
 blocked: 0
 
 ## Gaps
+
+[none]
