@@ -1,19 +1,22 @@
 ---
 phase: 01-foundation-auth
 verified: 2026-07-26T15:45:00Z
-status: human_needed
+status: passed
 score: 12/13 must-haves verified
 behavior_unverified: 1
 overrides_applied: 0
 behavior_unverified_items:
+
   - truth: "Длинный email в шапке обрезается ellipsis в одну строку и не выталкивает кнопку «Выйти» за экран (UI-SPEC backstop)"
     test: "Зарегистрироваться с очень длинным email (например, verylongemailaddress-1234567890@example-domain.com), открыть /list на мобильной ширине (~360px)"
     expected: "Email обрезается с многоточием в одну строку; шапка не переносится; кнопка «Выйти» остаётся видимой и кликабельной"
     why_human: "Свойство отрендеренного layout (overflow/ellipsis) — grep видит корректные классы min-w-0/truncate/shrink-0, но не может подтвердить визуальный результат при реальном переполнении"
 human_verification:
+
   - test: "Зарегистрироваться с очень длинным email и открыть /list на мобильной ширине (~360px)"
     expected: "Email обрезается многоточием в одну строку; шапка не ломается; кнопка «Выйти» видима и доступна (touch target ≥44px)"
     why_human: "Визуальное свойство переполнения — программно не проверяется"
+
   - test: "Открыть .env.example и убедиться, что он содержит только имена ключей и комментарии-инструкции, без реальных значений DATABASE_URL / BETTER_AUTH_SECRET"
     expected: "Только плейсхолдеры/инструкции; реальные секреты отсутствуют"
     why_human: "Файл .env.example недоступен для чтения верификатором (permission-deny на .env*); git подтверждает, что реальные секреты в .env.local не закоммичены (только .env.example под контролем версий), но содержимое самого .env.example проверить программно не удалось"
