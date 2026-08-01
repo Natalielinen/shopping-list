@@ -115,6 +115,34 @@ describe("itemInputSchema — price (ITEM-03, Pitfall 5)", () => {
     expect(result.success).toBe(true);
     if (result.success) expect(result.data.price).toBe(12.5);
   });
+
+  it("принимает цену с копейками 199.99 как рубли (BL-01, без перевода в копейки)", () => {
+    const result = itemInputSchema.safeParse({ ...validBase, price: "199.99" });
+    expect(result.success).toBe(true);
+    // Схема хранит РУБЛИ (199.99), перевод в копейки — на сервере при записи.
+    if (result.success) expect(result.data.price).toBe(199.99);
+  });
+
+  it("отклоняет более двух знаков после запятой (1.999, BL-01)", () => {
+    const result = itemInputSchema.safeParse({ ...validBase, price: "1.999" });
+    expect(result.success).toBe(false);
+    expect(messageFor(result, "price")).toBe("Не более двух знаков после запятой");
+  });
+
+  it("отклоняет слишком большое значение (> int4/100 рублей, BL-01)", () => {
+    const result = itemInputSchema.safeParse({
+      ...validBase,
+      price: "21474836.48",
+    });
+    expect(result.success).toBe(false);
+    expect(messageFor(result, "price")).toBe("Слишком большое значение");
+  });
+
+  it("отклоняет Infinity информативно (IN-03)", () => {
+    const result = itemInputSchema.safeParse({ ...validBase, price: "Infinity" });
+    expect(result.success).toBe(false);
+    expect(messageFor(result, "price")).toBe("Введите число");
+  });
 });
 
 describe("itemInputSchema — monthlyPayment (ITEM-04, Pitfall 6 — всегда optional)", () => {

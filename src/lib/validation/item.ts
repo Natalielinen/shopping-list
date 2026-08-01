@@ -14,14 +14,28 @@ import {
 // (не дублируем список ключей). Та же схема повторно вызывается на сервере в
 // Server Action плана 03 (never-trust-client, V5).
 
-// Хелпер: пустая строка из необязательного числового Input → undefined, иначе
-// coerce в число. Без preprocess z.coerce.number() превращает "" в 0 (Pitfall 5).
-// nonnegative — цена/платёж не бывают отрицательными; всегда optional.
-const optionalNumber = z.preprocess(
+// Хелпер: денежное поле в РУБЛЯХ (цена/платёж) из необязательного Input.
+//   - пустая строка → undefined (без preprocess z.coerce.number() дал бы 0, Pitfall 5);
+//   - nonnegative — деньги не бывают отрицательными;
+//   - finite — отсекаем NaN/Infinity информативным сообщением (IN-03), чтобы они
+//     не доехали до INSERT в integer-колонку;
+//   - max 21_474_836.47 ₽ — верхняя граница, при которой копейки (×100) ещё
+//     помещаются в int4 (2_147_483_647);
+//   - ≤2 знаков после запятой — рубли с копейками (BL-01). ВНИМАНИЕ: здесь только
+//     ВАЛИДАЦИЯ рублей, БЕЗ перевода в копейки. Схема общая для клиента (RHF
+//     zodResolver) и сервера; .transform(×100) применился бы ДВАЖДЫ (RHF + сервер)
+//     → ×10000. Перевод рубли→копейки делается РОВНО ОДИН РАЗ на сервере в write-
+//     пути (actions.ts), клиент копейки не отправляет. Всегда optional.
+const optionalRubles = z.preprocess(
   (v) => (v === "" || v == null ? undefined : v),
   z.coerce
     .number({ message: "Введите число" })
     .nonnegative("Значение не может быть отрицательным")
+    .max(21_474_836.47, "Слишком большое значение")
+    .refine((n) => Number.isFinite(n), { message: "Введите число" })
+    .refine((n) => Math.abs(n * 100 - Math.round(n * 100)) < 1e-4, {
+      message: "Не более двух знаков после запятой",
+    })
     .optional()
 );
 
@@ -54,11 +68,11 @@ export const itemInputSchema = z.object({
   benefit: z.enum(BENEFIT_VALUES, { message: "Выберите значение" }),
   link: optionalUrl,
   description: optionalText,
-  price: optionalNumber,
+  price: optionalRubles, // рубли; сервер переводит в копейки при записи (BL-01)
   deadline: optionalDate,
   doubts: z.enum(DOUBTS_VALUES).default("sure"), // ITEM-05 / D-01
   isCredit: z.boolean().default(false),
-  monthlyPayment: optionalNumber, // ВСЕГДА optional (Pitfall 6 — условна лишь видимость)
+  monthlyPayment: optionalRubles, // ВСЕГДА optional (Pitfall 6 — условна лишь видимость)
 });
 
 export type ItemInput = z.infer<typeof itemInputSchema>;

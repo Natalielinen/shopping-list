@@ -84,4 +84,25 @@ describe("createItemForUser — изоляция записи по userId (AUTH-
     expect(aItems).toHaveLength(1);
     expect(bItems).toEqual([]);
   });
+
+  // BL-01: колонки price/monthly_payment — integer-копейки. Проверяем на РЕАЛЬНОЙ
+  // Postgres, что копеечное значение (199.99 ₽ = 19999 копеек), которое даёт
+  // серверный перевод рубли→копейки, вставляется в int4 и точно читается обратно
+  // (раньше дробный рубль ронял INSERT в integer-колонку).
+  it("сохраняет цену в копейках (int4) и точно читает обратно", async () => {
+    const a = await seedUser("a@test.dev");
+
+    const created = await createItemForUser(a.id, {
+      ...baseData,
+      price: 19999, // 199.99 ₽ в копейках
+      monthlyPayment: 5000, // 50.00 ₽ в копейках
+    });
+
+    expect(created!.price).toBe(19999);
+    expect(created!.monthlyPayment).toBe(5000);
+
+    const [row] = await findItemsForUser(a.id);
+    expect(row!.price).toBe(19999);
+    expect(row!.monthlyPayment).toBe(5000);
+  });
 });

@@ -29,9 +29,22 @@ export async function createItem(input: ItemInput): Promise<CreateItemResult> {
     return { ok: false, error: SAVE_ERROR };
   }
 
+  // Перевод рубли→копейки РОВНО ЗДЕСЬ (единственный write-путь, BL-01). Схема
+  // валидирует рубли с ≤2 знаками, а колонки price/monthly_payment — integer-
+  // копейки. Делать это в общей схеме нельзя: RHF-resolver и серверный safeParse
+  // применили бы transform дважды (×10000).
+  const { price, monthlyPayment, ...rest } = parsed.data;
+  const toKopecks = (rubles: number | undefined): number | undefined =>
+    rubles === undefined ? undefined : Math.round(rubles * 100);
+
   try {
-    // В write идут ТОЛЬКО parsed.data; userId подмешивается репозиторием.
-    await createItemForUser(user.id, parsed.data);
+    // В write идут ТОЛЬКО parsed.data (с деньгами в копейках); userId
+    // подмешивается репозиторием.
+    await createItemForUser(user.id, {
+      ...rest,
+      price: toKopecks(price),
+      monthlyPayment: toKopecks(monthlyPayment),
+    });
     return { ok: true };
   } catch {
     return { ok: false, error: SAVE_ERROR };
