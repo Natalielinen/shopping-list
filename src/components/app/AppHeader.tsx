@@ -6,6 +6,14 @@
 //
 // Кнопка «Выйти» (D-09) занимает слот справа — завершает D-08 (имя + email +
 // выход). LogoutButton — client-leaf; сама шапка остаётся серверной.
+//
+// Кнопка «Добавить» (D-08) — постоянная точка входа на форму /list/new из любого
+// экрана. Навигационная ссылка (next Link + shadcn Button asChild): интерактивное
+// состояние не требует "use client", шапка остаётся серверным компонентом.
+import Link from "next/link";
+import { Plus } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { LogoutButton } from "./LogoutButton";
 
 export function AppHeader({ email }: { email: string }) {
@@ -19,6 +27,12 @@ export function AppHeader({ email }: { email: string }) {
         >
           {email}
         </span>
+        <Button asChild size="sm" className="h-9 shrink-0">
+          <Link href="/list/new">
+            <Plus />
+            Добавить
+          </Link>
+        </Button>
         <LogoutButton />
       </div>
     </header>
