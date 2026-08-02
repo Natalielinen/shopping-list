@@ -4,16 +4,16 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 03
 current_phase_name: edit-delete-items
-status: executing
-stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-08-02T06:33:19.248Z"
+status: verifying
+stopped_at: Completed 03-02-PLAN.md
+last_updated: "2026-08-02T06:42:43.794Z"
 last_activity: 2026-08-02
 last_activity_desc: Phase 03 execution started
 progress:
   total_phases: 3
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 11
-  completed_plans: 10
+  completed_plans: 11
 ---
 
 # Project State
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-08-01)
 
 Phase: 03 (edit-delete-items) — EXECUTING
 Plan: 2 of 2
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-08-02 — Phase 03 execution started
 
-Progress: [█████████░] 91%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -68,6 +68,7 @@ Progress: [█████████░] 91%
 | Phase 02 P04 | 7min | 2 tasks | 3 files |
 | Phase 02 P05 | 12min | 1 tasks | 4 files |
 | Phase 03 P01 | 8 | 2 tasks | 12 files |
+| Phase 03 P02 | 5min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -92,6 +93,8 @@ Recent decisions affecting current work:
 - [Phase ?]: AppHeader остаётся серверным компонентом: кнопка «Добавить» — навигационная ссылка (Link + Button asChild), D-08
 - [Phase ?]: [02-05] ScoreBreakdown (LIST-07): client-leaf Collapsible, свёрнут по умолчанию; shared-now — breakdown и total считаются одним now в RSC-родителе (list/page.tsx), листья без new Date → сумма разбивки == total
 - [Phase ?]: [03-01] Edit-слой: findItemForUser/updateItemForUser со scoping and(eq(id),eq(userId)) (IDOR T-3-01/T-3-02); updateItem рубли→копейки один раз, { ok } без redirect; единая форма add/edit (mode/initialValues); пересчёт badge на чтении (D-08)
+- [Phase ?]: 03-02: удаление (ITEM-08) — deleteItemForUser со scoping по userId (IDOR T-3-05) + deleteItem без payload-валидации (D-06); AlertDialog confirm, e.preventDefault() держит диалог открытым при ошибке (D-05/T-3-06)
+- [Phase ?]: 03-02: AlertDialog взят из уже установленного unified-пакета radix-ui (нулевой прирост supply-chain), а не отдельного @radix-ui/react-alert-dialog
 
 ### Pending Todos
 
@@ -117,6 +120,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-02T06:33:11.395Z
-Stopped at: Completed 03-01-PLAN.md
+Last session: 2026-08-02T06:42:34.817Z
+Stopped at: Completed 03-02-PLAN.md
 Resume file: None
