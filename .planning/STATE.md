@@ -2,18 +2,18 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 3
-current_phase_name: Редактирование и удаление покупок
+current_phase: 03
+current_phase_name: edit-delete-items
 status: executing
-stopped_at: Phase 3 UI-SPEC approved
-last_updated: "2026-08-02T06:13:55.986Z"
-last_activity: 2026-08-01
-last_activity_desc: Phase 2 complete, transitioned to Phase 3
+stopped_at: Completed 03-01-PLAN.md
+last_updated: "2026-08-02T06:33:19.248Z"
+last_activity: 2026-08-02
+last_activity_desc: Phase 03 execution started
 progress:
   total_phases: 3
   completed_phases: 2
   total_plans: 11
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # Project State
@@ -23,16 +23,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-01)
 
 **Core value:** Пользователь видит свои покупки автоматически отсортированными по осмысленному приоритету, чтобы понимать, что покупать в первую очередь.
-**Current focus:** Phase 3 — Редактирование и удаление покупок
+**Current focus:** Phase 03 — edit-delete-items
 
 ## Current Position
 
-Phase: 3 — Редактирование и удаление покупок
-Plan: Not started
+Phase: 03 (edit-delete-items) — EXECUTING
+Plan: 2 of 2
 Status: Ready to execute
-Last activity: 2026-08-01 — Phase 2 complete, transitioned to Phase 3
+Last activity: 2026-08-02 — Phase 03 execution started
 
-Progress: [██████████] 100%
+Progress: [█████████░] 91%
 
 ## Performance Metrics
 
@@ -67,6 +67,7 @@ Progress: [██████████] 100%
 | Phase 02 P03 | 21min | 2 tasks | 15 files |
 | Phase 02 P04 | 7min | 2 tasks | 3 files |
 | Phase 02 P05 | 12min | 1 tasks | 4 files |
+| Phase 03 P01 | 8 | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -90,6 +91,7 @@ Recent decisions affecting current work:
 - [Phase ?]: monthlyPayment всегда optional в схеме; условна только видимость поля по isCredit (Pitfall 6), с очисткой setValue(undefined) при снятии
 - [Phase ?]: AppHeader остаётся серверным компонентом: кнопка «Добавить» — навигационная ссылка (Link + Button asChild), D-08
 - [Phase ?]: [02-05] ScoreBreakdown (LIST-07): client-leaf Collapsible, свёрнут по умолчанию; shared-now — breakdown и total считаются одним now в RSC-родителе (list/page.tsx), листья без new Date → сумма разбивки == total
+- [Phase ?]: [03-01] Edit-слой: findItemForUser/updateItemForUser со scoping and(eq(id),eq(userId)) (IDOR T-3-01/T-3-02); updateItem рубли→копейки один раз, { ok } без redirect; единая форма add/edit (mode/initialValues); пересчёт badge на чтении (D-08)
 
 ### Pending Todos
 
@@ -115,6 +117,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-02T05:37:08.062Z
-Stopped at: Phase 3 UI-SPEC approved
-Resume file: D:/myProjects/shopping-list/.planning/phases/03-edit-delete-items/03-UI-SPEC.md
+Last session: 2026-08-02T06:33:11.395Z
+Stopped at: Completed 03-01-PLAN.md
+Resume file: None

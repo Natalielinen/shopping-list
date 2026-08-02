@@ -99,11 +99,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Пользователь может удалить свою покупку, и она исчезает из списка.
   3. Редактирование и удаление затрагивают только покупки самого пользователя.
 
-**Plans**: 2 plans
+**Plans**: 1/2 plans executed
 
 **Wave 1**
 
-- [ ] 03-01-PLAN.md — Tracer: сквозное редактирование (карточка → /list/[id]/edit prefill → updateItem scoped → редирект /list с пересчитанным badge) + изоляция update/read (ITEM-07)
+- [x] 03-01-PLAN.md — Tracer: сквозное редактирование (карточка → /list/[id]/edit prefill → updateItem scoped → редирект /list с пересчитанным badge) + изоляция update/read (ITEM-07)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -152,6 +152,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Фундамент и аутентификация | 4/4 | Complete    | 2026-08-01 |
 | 2. Добавление покупок с автоматическим приоритетом | 5/5 | Complete    | 2026-08-01 |
-| 3. Редактирование и удаление покупок | 0/2 | Planned | - |
+| 3. Редактирование и удаление покупок | 1/2 | In Progress|  |
 | 4. Список — сортировка, фильтры и архив | 0/TBD | Not started | - |
 | 5. Зависимости и блокировка | 0/TBD | Not started | - |

@@ -22,7 +22,7 @@
 - [x] **ITEM-04**: Пользователь может отметить isCredit; при isCredit=true показывается необязательное поле monthlyPayment
 - [x] **ITEM-05**: Пользователь может выставить doubts (по умолчанию — нет сомнений)
 - [ ] **ITEM-06**: Пользователь может указать зависимость (depends) от другой своей покупки
-- [ ] **ITEM-07**: Пользователь может редактировать свою покупку
+- [x] **ITEM-07**: Пользователь может редактировать свою покупку
 - [ ] **ITEM-08**: Пользователь может удалить свою покупку
 
 ### Scoring Engine
@@ -102,7 +102,7 @@
 | SCORE-06 | Phase 2 | Complete |
 | LIST-06 | Phase 2 | Complete |
 | LIST-07 | Phase 2 | Complete |
-| ITEM-07 | Phase 3 | Pending |
+| ITEM-07 | Phase 3 | Complete |
 | ITEM-08 | Phase 3 | Pending |
 | LIST-01 | Phase 4 | Pending |
 | LIST-02 | Phase 4 | Pending |
