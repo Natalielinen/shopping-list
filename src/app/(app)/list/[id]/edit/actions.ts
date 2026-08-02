@@ -1,0 +1,56 @@
+"use server";
+
+import { itemInputSchema, type ItemInput } from "@/lib/validation/item";
+import { requireUser } from "@/server/auth/current-user";
+import { updateItemForUser } from "@/server/repos/items";
+
+// Server Action обновления покупки (ITEM-07 / D-03) — зеркалит createItem.
+//
+// Безопасность:
+//   - userId берётся ТОЛЬКО из серверной сессии через requireUser() (T-3-01/T-3-03),
+//     НИКОГДА из аргумента `input` — mass-assignment владельца невозможен.
+//   - Вход повторно валидируется itemInputSchema.safeParse на сервере
+//     (never-trust-client V5 / T-3-04), несмотря на клиентский RHF-resolver.
+//   - updateItemForUser скоупит UPDATE по userId → чужую покупку изменить нельзя.
+//
+// Навигация: action НЕ вызывает redirect() (Pitfall 7 — NEXT_REDIRECT кинулся бы
+// и был пойман try/catch). Возвращает результат-объект; переход на /list делает
+// клиент (router.refresh + push).
+const SAVE_ERROR = "Не удалось сохранить изменения. Попробуйте ещё раз.";
+
+export type UpdateItemResult = { ok: true } | { ok: false; error: string };
+
+export async function updateItem(
+  id: string,
+  input: ItemInput
+): Promise<UpdateItemResult> {
+  // userId — из сессии; при отсутствии сессии бросает до любой записи (T-3-03).
+  const user = await requireUser();
+
+  // Серверная ре-валидация недоверенного payload (V5).
+  const parsed = itemInputSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, error: SAVE_ERROR };
+  }
+
+  // Перевод рубли→копейки РОВНО ЗДЕСЬ (единственный write-путь, BL-01) — как в
+  // create. Схема валидирует рубли, а колонки price/monthly_payment — integer-
+  // копейки. Делать это в общей схеме нельзя: RHF-resolver и серверный safeParse
+  // применили бы transform дважды (×10000).
+  const { price, monthlyPayment, ...rest } = parsed.data;
+  const toKopecks = (rubles: number | undefined): number | undefined =>
+    rubles === undefined ? undefined : Math.round(rubles * 100);
+
+  try {
+    // В write идут ТОЛЬКО parsed.data (с деньгами в копейках); userId и id
+    // скоупят UPDATE в репозитории (изоляция D-09).
+    await updateItemForUser(user.id, id, {
+      ...rest,
+      price: toKopecks(price),
+      monthlyPayment: toKopecks(monthlyPayment),
+    });
+    return { ok: true };
+  } catch {
+    return { ok: false, error: SAVE_ERROR };
+  }
+}

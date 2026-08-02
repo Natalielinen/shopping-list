@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
 import type { Contribution } from "@/lib/scoring/scoring";
@@ -63,9 +63,15 @@ function BreakdownRow({
 export function ScoreBreakdown({
   breakdown,
   total,
+  actions,
 }: {
   breakdown: Contribution[];
   total: number;
+  // Иконки действий карточки (edit/delete, D-04) — рендерятся ОТДЕЛЬНЫМИ
+  // элементами в ряду триггера, а не внутри него: тап по иконке НЕ переключает
+  // Collapsible (решение коллизии с LIST-07). Триггер сжимается (flex-1 min-w-0),
+  // иконки фиксированы (shrink-0); CollapsibleContent остаётся во всю ширину ряда.
+  actions?: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -76,21 +82,24 @@ export function ScoreBreakdown({
 
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
-      <CollapsibleTrigger
-        className={cn(
-          "flex h-11 w-full items-center justify-between gap-2 rounded-md px-1",
-          "text-sm font-medium text-muted-foreground"
-        )}
-      >
-        <span>{open ? "Скрыть разбивку" : "Показать разбивку"}</span>
-        <ChevronDown
-          aria-hidden
+      <div className="flex items-center gap-1">
+        <CollapsibleTrigger
           className={cn(
-            "size-4 transition-transform",
-            open && "rotate-180"
+            "flex h-11 min-w-0 flex-1 items-center justify-between gap-2 rounded-md px-1",
+            "text-sm font-medium text-muted-foreground"
           )}
-        />
-      </CollapsibleTrigger>
+        >
+          <span>{open ? "Скрыть разбивку" : "Показать разбивку"}</span>
+          <ChevronDown
+            aria-hidden
+            className={cn(
+              "size-4 transition-transform",
+              open && "rotate-180"
+            )}
+          />
+        </CollapsibleTrigger>
+        {actions}
+      </div>
 
       <CollapsibleContent>
         <div className="flex flex-col gap-2 px-1 pt-1 pb-2">

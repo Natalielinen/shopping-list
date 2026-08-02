@@ -56,7 +56,12 @@ export default async function ListPage() {
     <ul className="flex flex-col gap-4 px-4 py-6">
       {scored.map(({ item, total, breakdown }) => (
         <li key={item.id}>
-          <ItemCard title={item.title} total={total} breakdown={breakdown} />
+          <ItemCard
+            id={item.id}
+            title={item.title}
+            total={total}
+            breakdown={breakdown}
+          />
         </li>
       ))}
     </ul>

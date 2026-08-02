@@ -10,6 +10,7 @@ import type { z } from "zod";
 
 import { itemInputSchema, type ItemInput } from "@/lib/validation/item";
 import { createItem, type CreateItemResult } from "@/app/(app)/list/new/actions";
+import { updateItem } from "@/app/(app)/list/[id]/edit/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -93,15 +94,31 @@ const DOUBTS_OPTIONS: ReadonlyArray<[ItemInput["doubts"], string]> = [
   ["strongDoubt", "Сильно сомневаюсь"], // −3
 ];
 
-export function AddItemForm() {
+// Единая форма add/edit (D-01). В create-режиме (по умолчанию) поля пусты и
+// submit вызывает createItem; в edit-режиме форма предзаполнена `initialValues`
+// (RSC-обёртка отдаёт значения покупки: цена/платёж уже в рублях, ÷100 из копеек),
+// submit вызывает updateItem(itemId, …). Различаются только submit-лейбл, текст
+// ошибки и целевой Server Action — всё остальное идентично (единая Zod-валидация).
+export function AddItemForm({
+  mode = "create",
+  itemId,
+  initialValues,
+}: {
+  mode?: "create" | "edit";
+  itemId?: string;
+  initialValues?: Partial<ItemFormInput>;
+} = {}) {
   const router = useRouter();
   const [formError, setFormError] = useState<string | null>(null);
+  const isEdit = mode === "edit";
+  const EDIT_SAVE_ERROR = "Не удалось сохранить изменения. Попробуйте ещё раз.";
 
   const form = useForm<ItemFormInput, unknown, ItemInput>({
     resolver: zodResolver(itemInputSchema),
     // doubts/isCredit заданы явно (не полагаемся на schema `.default()` для
     // первого рендера): Select сразу показывает «Уверен(а)», чекбокс — снят.
-    defaultValues: { title: "", doubts: "sure", isCredit: false },
+    // В edit-режиме `initialValues` (из покупки) переопределяют дефолты.
+    defaultValues: { title: "", doubts: "sure", isCredit: false, ...initialValues },
     mode: "onSubmit",
   });
 
@@ -112,14 +129,20 @@ export function AddItemForm() {
 
   async function onSubmit(values: ItemInput) {
     setFormError(null);
-    // createItem может РЕДЖЕКТНУТЬСЯ (истёкшая сессия → requireUser() бросает до
-    // try/catch экшена; сетевой сбой Server Action). Оборачиваем в try/catch,
-    // чтобы показать форм-левел Alert вместо необработанного reject (IN-01).
+    // create/updateItem могут РЕДЖЕКТНУТЬСЯ (истёкшая сессия → requireUser()
+    // бросает до try/catch экшена; сетевой сбой Server Action). Оборачиваем в
+    // try/catch, чтобы показать форм-левел Alert вместо необработанного reject
+    // (IN-01). В edit-режиме вызывается updateItem(itemId, …); текст ошибки —
+    // «…сохранить изменения…» (UI-SPEC отличается от create-копии).
     let res: CreateItemResult;
     try {
-      res = await createItem(values);
+      res = isEdit
+        ? await updateItem(itemId!, values)
+        : await createItem(values);
     } catch {
-      setFormError("Не удалось сохранить покупку. Попробуйте ещё раз.");
+      setFormError(
+        isEdit ? EDIT_SAVE_ERROR : "Не удалось сохранить покупку. Попробуйте ещё раз."
+      );
       return;
     }
     if (!res.ok) {
@@ -429,7 +452,7 @@ export function AddItemForm() {
             className="h-11 w-full text-base"
           >
             {isPending ? <Loader2 className="animate-spin" /> : null}
-            Добавить покупку
+            {isEdit ? "Сохранить" : "Добавить покупку"}
           </Button>
           <Button
             type="button"

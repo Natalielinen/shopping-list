@@ -1,21 +1,32 @@
+import Link from "next/link";
+import { Pencil } from "lucide-react";
+
 import type { Contribution } from "@/lib/scoring/scoring";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PriorityBadge } from "@/components/items/PriorityBadge";
 import { ScoreBreakdown } from "@/components/items/ScoreBreakdown";
 
-// Карточка покупки в списке (LIST-06) — RSC. Показывает название (Heading
-// 20/600) + badge приоритета, а под ними — раскрываемую по тапу разбивку очков
-// (LIST-07). Длинное название усекается (`truncate`/`min-w-0`) и не выталкивает
-// badge приоритета из карточки (UI-SPEC backstop E4).
+// Карточка покупки в списке (LIST-06 / ITEM-07) — RSC. Показывает название
+// (Heading 20/600) + badge приоритета, а под ними — ряд действий: раскрываемый по
+// тапу триггер разбивки очков (LIST-07) и иконка «карандаш» edit (D-04).
 //
 // `breakdown` (результат computeBreakdown(item, now)) и `total` приходят из
 // родителя-RSC (list/page.tsx), вычисленные ОДНИМ `now` → карточка форвардит их в
 // ScoreBreakdown без повторного вычисления даты (нет new Date здесь).
+//
+// Иконка edit — отдельный Button (asChild Link → /list/[id]/edit) в ряду триггера
+// разбивки (ScoreBreakdown `actions`-слот): тап по ней НЕ переключает Collapsible
+// (D-04, коллизия с LIST-07). Тач-цель 44px (h-11 w-11). Длинное название
+// усекается (`truncate`/`min-w-0`) и не выталкивает badge (UI-SPEC backstop).
+// (Иконка delete — Plan 02.)
 export function ItemCard({
+  id,
   title,
   total,
   breakdown,
 }: {
+  id: string;
   title: string;
   total: number;
   breakdown: Contribution[];
@@ -29,7 +40,23 @@ export function ItemCard({
           </span>
           <PriorityBadge total={total} />
         </div>
-        <ScoreBreakdown breakdown={breakdown} total={total} />
+        <ScoreBreakdown
+          breakdown={breakdown}
+          total={total}
+          actions={
+            <Button
+              asChild
+              variant="ghost"
+              size="icon"
+              aria-label="Редактировать покупку"
+              className="h-11 w-11 shrink-0 text-muted-foreground"
+            >
+              <Link href={`/list/${id}/edit`}>
+                <Pencil className="size-4" />
+              </Link>
+            </Button>
+          }
+        />
       </CardContent>
     </Card>
   );
