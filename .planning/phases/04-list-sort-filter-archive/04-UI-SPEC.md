@@ -1,10 +1,11 @@
 ---
 phase: 4
 slug: list-sort-filter-archive
-status: draft
+status: approved
 shadcn_initialized: true
 preset: "shadcn/ui — style radix-nova, base color neutral, CSS variables (OKLCH), Tailwind v4"
 created: 2026-08-02
+reviewed_at: 2026-08-02
 ---
 
 # Phase 4 — UI Design Contract
@@ -234,11 +235,11 @@ Applicable state considerations resolved: **13 covered, 3 backstop, 0 unresolved
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** verified 2026-08-02 — gsd-ui-checker, 6/6 PASS, 0 recommendations
