@@ -44,11 +44,15 @@ export async function updateItem(
   try {
     // В write идут ТОЛЬКО parsed.data (с деньгами в копейках); userId и id
     // скоупят UPDATE в репозитории (изоляция D-09).
-    await updateItemForUser(user.id, id, {
+    const row = await updateItemForUser(user.id, id, {
       ...rest,
       price: toKopecks(price),
       monthlyPayment: toKopecks(monthlyPayment),
     });
+    // WR-01: репозиторий возвращает null, если WHERE не нашёл строку (чужая или
+    // несуществующая покупка — no-op). Не рапортуем об успехе: клиент не должен
+    // навигировать на /list, если ничего не изменилось. Scoping по userId цел.
+    if (!row) return { ok: false, error: SAVE_ERROR };
     return { ok: true };
   } catch {
     return { ok: false, error: SAVE_ERROR };
@@ -69,7 +73,10 @@ export async function deleteItem(id: string): Promise<DeleteItemResult> {
   const user = await requireUser();
 
   try {
-    await deleteItemForUser(user.id, id);
+    const row = await deleteItemForUser(user.id, id);
+    // WR-01: null означает, что WHERE не нашёл строку (чужая/несуществующая
+    // покупка — no-op). Не рапортуем об успехе удаления того, чего не удалили.
+    if (!row) return { ok: false, error: DELETE_ERROR };
     return { ok: true };
   } catch {
     return { ok: false, error: DELETE_ERROR };
