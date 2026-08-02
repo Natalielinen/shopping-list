@@ -25,12 +25,12 @@ Web-приложение (mobile-first) для составления списк
 - ✓ Пользователь может добавить покупку через форму (title обязателен) с обязательными category/urgency/need/benefit и необязательными link/description/price/deadline/doubts/isCredit (+ условный monthlyPayment) (ITEM-01..05) — Phase 2
 - ✓ Приоритет (total) считается автоматически на чтении с текущей датой: сумма очковых полей, deadlinePoints (просрочка = фикс +100), isCredit −2, doubts 0/−1/−3, фиксированные шкалы SUMMARY (SCORE-01..06) — Phase 2
 - ✓ Каждая покупка показывает доступный badge приоритета (4 избыточных канала) и раскрываемую по тапу разбивку очков; список отсортирован по убыванию приоритета (LIST-06, LIST-07) — Phase 2
+- ✓ Пользователь может редактировать и удалять свои покупки с пересчётом приоритета на чтении; правки корректно очищают nullable-поля; update/delete изолированы по userId (ITEM-07, ITEM-08) — Phase 3
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] Пользователь может редактировать и удалять свои покупки (с пересчётом приоритета) — Phase 3
 - [ ] Фильтры сортировки: по порядку добавления, по алфавиту (детерминированный tiebreaker) — Phase 4
 - [ ] Пользователь может отметить покупку купленной (completed); купленные уходят в архив — Phase 4
 - [ ] Фильтр «показывать купленные» включает архивные покупки в общий список — Phase 4
@@ -98,4 +98,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-08-01 after Phase 2*
+*Last updated: 2026-08-02 after Phase 3*
