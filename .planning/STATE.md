@@ -20,10 +20,10 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-08-01)
+See: .planning/PROJECT.md (updated 2026-08-02)
 
 **Core value:** Пользователь видит свои покупки автоматически отсортированными по осмысленному приоритету, чтобы понимать, что покупать в первую очередь.
-**Current focus:** Phase 03 — edit-delete-items
+**Current focus:** Phase 4 — Список — сортировка, фильтры и архив
 
 ## Current Position
 
