@@ -129,6 +129,15 @@ export function AddItemForm({
 
   async function onSubmit(values: ItemInput) {
     setFormError(null);
+    // WR-02: monthlyPayment имеет смысл только при isCredit. Из-за
+    // shouldUnregister:false скрытое поле сохраняет значение (например при
+    // противоречивом initialValues isCredit=false + monthlyPayment из прошлого
+    // состояния), а onCheckedChange-хендлер не срабатывает, если чекбокс не
+    // трогали. Принудительно очищаем платёж на submit, когда покупка не в кредит,
+    // чтобы устаревшее число никогда не ушло на сервер без кредита.
+    const payload: ItemInput = values.isCredit
+      ? values
+      : { ...values, monthlyPayment: undefined };
     // create/updateItem могут РЕДЖЕКТНУТЬСЯ (истёкшая сессия → requireUser()
     // бросает до try/catch экшена; сетевой сбой Server Action). Оборачиваем в
     // try/catch, чтобы показать форм-левел Alert вместо необработанного reject
@@ -137,8 +146,8 @@ export function AddItemForm({
     let res: CreateItemResult;
     try {
       res = isEdit
-        ? await updateItem(itemId!, values)
-        : await createItem(values);
+        ? await updateItem(itemId!, payload)
+        : await createItem(payload);
     } catch {
       setFormError(
         isEdit ? EDIT_SAVE_ERROR : "Не удалось сохранить покупку. Попробуйте ещё раз."
