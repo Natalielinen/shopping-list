@@ -209,5 +209,32 @@ describe("AddItemForm", () => {
       expect(createItem).not.toHaveBeenCalled();
       await waitFor(() => expect(push).toHaveBeenCalledWith("/list"));
     });
+
+    // WR-02: противоречивое начальное состояние — isCredit=false, но
+    // monthlyPayment задан в initialValues (достижимо из-за прошлого CR-01). Поле
+    // не рендерится (нет чекбокс-хендлера), а RHF (shouldUnregister:false) хранит
+    // значение и отправил бы его на submit. Форма обязана принудительно очистить
+    // monthlyPayment, когда покупка не в кредит, чтобы платёж без кредита не ушёл.
+    it("не отправляет monthlyPayment, если isCredit=false на submit (даже если значение было в initialValues)", async () => {
+      const user = userEvent.setup({ pointerEventsCheck: 0 });
+      updateItem.mockResolvedValue({ ok: true });
+
+      render(
+        <AddItemForm
+          mode="edit"
+          itemId="item-1"
+          initialValues={{ ...editValues, isCredit: false, monthlyPayment: "50" }}
+        />
+      );
+
+      // Поле не рендерится, значит снять кредит через UI невозможно — проверяем шов submit.
+      expect(screen.queryByLabelText("Ежемесячный платёж")).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "Сохранить" }));
+
+      await waitFor(() => expect(updateItem).toHaveBeenCalledTimes(1));
+      const sentValues = updateItem.mock.calls[0]![1] as { monthlyPayment?: unknown };
+      expect(sentValues.monthlyPayment).toBeUndefined();
+    });
   });
 });
