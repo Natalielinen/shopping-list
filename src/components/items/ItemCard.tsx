@@ -4,6 +4,7 @@ import { Pencil } from "lucide-react";
 import type { Contribution } from "@/lib/scoring/scoring";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { DeleteItemButton } from "@/components/items/DeleteItemButton";
 import { PriorityBadge } from "@/components/items/PriorityBadge";
 import { ScoreBreakdown } from "@/components/items/ScoreBreakdown";
 
@@ -15,11 +16,13 @@ import { ScoreBreakdown } from "@/components/items/ScoreBreakdown";
 // родителя-RSC (list/page.tsx), вычисленные ОДНИМ `now` → карточка форвардит их в
 // ScoreBreakdown без повторного вычисления даты (нет new Date здесь).
 //
-// Иконка edit — отдельный Button (asChild Link → /list/[id]/edit) в ряду триггера
-// разбивки (ScoreBreakdown `actions`-слот): тап по ней НЕ переключает Collapsible
-// (D-04, коллизия с LIST-07). Тач-цель 44px (h-11 w-11). Длинное название
-// усекается (`truncate`/`min-w-0`) и не выталкивает badge (UI-SPEC backstop).
-// (Иконка delete — Plan 02.)
+// Иконки edit/delete — отдельные Button в ряду триггера разбивки (ScoreBreakdown
+// `actions`-слот, gap-1): тап по ним НЕ переключает Collapsible (D-04, коллизия с
+// LIST-07). Порядок: разбивка → edit → delete (деструктивное действие крайнее
+// справа, дальше от основного потока — ниже риск случайного тапа). Тач-цель 44px
+// (h-11 w-11). Длинное название усекается (`truncate`/`min-w-0`) и не выталкивает
+// badge (UI-SPEC backstop). delete-иконка нейтральна в покое → text-destructive на
+// hover/focus (D-04); удаление — только через подтверждение AlertDialog (D-05).
 export function ItemCard({
   id,
   title,
@@ -44,17 +47,20 @@ export function ItemCard({
           breakdown={breakdown}
           total={total}
           actions={
-            <Button
-              asChild
-              variant="ghost"
-              size="icon"
-              aria-label="Редактировать покупку"
-              className="h-11 w-11 shrink-0 text-muted-foreground"
-            >
-              <Link href={`/list/${id}/edit`}>
-                <Pencil className="size-4" />
-              </Link>
-            </Button>
+            <>
+              <Button
+                asChild
+                variant="ghost"
+                size="icon"
+                aria-label="Редактировать покупку"
+                className="h-11 w-11 shrink-0 text-muted-foreground"
+              >
+                <Link href={`/list/${id}/edit`}>
+                  <Pencil className="size-4" />
+                </Link>
+              </Button>
+              <DeleteItemButton id={id} />
+            </>
           }
         />
       </CardContent>
