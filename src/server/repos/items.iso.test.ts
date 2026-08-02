@@ -1,7 +1,12 @@
 // @vitest-environment node
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 
-import { createItemForUser, findItemsForUser } from "@/server/repos/items";
+import {
+  createItemForUser,
+  findItemForUser,
+  findItemsForUser,
+  updateItemForUser,
+} from "@/server/repos/items";
 
 import { closeTestDb, resetDb, seedItem, seedUser } from "../../../tests/helpers/db";
 
@@ -104,5 +109,72 @@ describe("createItemForUser — изоляция записи по userId (AUTH-
     const [row] = await findItemsForUser(a.id);
     expect(row!.price).toBe(19999);
     expect(row!.monthlyPayment).toBe(5000);
+  });
+});
+
+// Изоляция ОБНОВЛЕНИЯ по userId (ITEM-07 / T-3-01, IDOR на запись). Проверяется на
+// РЕАЛЬНОЙ тестовой Postgres: updateItemForUser скоупит UPDATE
+// `and(eq(id), eq(userId))`, поэтому пользователь B не может изменить покупку A
+// (WHERE не находит строку → .returning() пуст → null, строка A не тронута), а
+// владелец A — может.
+describe("updateItemForUser — изоляция записи по userId (T-3-01 / AUTH-04)", () => {
+  const baseData = {
+    title: "A-updated",
+    category: "study",
+    urgency: "vital",
+    need: "neededAndWanted",
+    benefit: "income",
+    doubts: "doubt",
+    isCredit: false,
+  } as const;
+
+  it("пользователь B не может обновить покупку A (возврат null, строка A не изменилась)", async () => {
+    const a = await seedUser("a@test.dev");
+    const b = await seedUser("b@test.dev");
+    const itemA = await seedItem(a.id, { title: "A-private" });
+
+    const result = await updateItemForUser(b.id, itemA.id, { ...baseData });
+
+    expect(result).toBeNull();
+
+    // Покупка A осталась нетронутой (title прежний, не «A-updated»).
+    const [row] = await findItemsForUser(a.id);
+    expect(row!.title).toBe("A-private");
+  });
+
+  it("владелец A обновляет свою покупку и получает обновлённую строку", async () => {
+    const a = await seedUser("a@test.dev");
+    const itemA = await seedItem(a.id, { title: "A-private" });
+
+    const result = await updateItemForUser(a.id, itemA.id, { ...baseData });
+
+    expect(result).not.toBeNull();
+    expect(result!.title).toBe("A-updated");
+    expect(result!.urgency).toBe("vital");
+    expect(result!.userId).toBe(a.id);
+  });
+});
+
+// Изоляция ЧТЕНИЯ одной покупки по userId (ITEM-07 / T-3-02, IDOR на чтение).
+// findItemForUser скоупит SELECT по userId → чужая/несуществующая покупка → null
+// (RSC-обёртка вызовет notFound(), форма не предзаполнится чужими данными).
+describe("findItemForUser — изоляция чтения одной покупки по userId (T-3-02)", () => {
+  it("пользователь B не может прочитать покупку A (null)", async () => {
+    const a = await seedUser("a@test.dev");
+    const b = await seedUser("b@test.dev");
+    const itemA = await seedItem(a.id, { title: "A-private" });
+
+    const forB = await findItemForUser(b.id, itemA.id);
+    expect(forB).toBeNull();
+  });
+
+  it("владелец A читает свою покупку", async () => {
+    const a = await seedUser("a@test.dev");
+    const itemA = await seedItem(a.id, { title: "A-private" });
+
+    const forA = await findItemForUser(a.id, itemA.id);
+    expect(forA).not.toBeNull();
+    expect(forA!.title).toBe("A-private");
+    expect(forA!.userId).toBe(a.id);
   });
 });

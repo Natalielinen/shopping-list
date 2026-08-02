@@ -31,6 +31,11 @@ vi.mock("@/app/(app)/list/new/actions", () => ({
   createItem: (...args: unknown[]) => createItem(...args),
 }));
 
+const updateItem = vi.fn();
+vi.mock("@/app/(app)/list/[id]/edit/actions", () => ({
+  updateItem: (...args: unknown[]) => updateItem(...args),
+}));
+
 import { AddItemForm } from "./AddItemForm";
 
 // Хелпер выбора значения в Radix Select: клик по триггеру (ассоциирован с
@@ -50,6 +55,7 @@ describe("AddItemForm", () => {
     push.mockReset();
     refresh.mockReset();
     createItem.mockReset();
+    updateItem.mockReset();
   });
 
   it("рендерит лейблы всех полей формы", () => {
@@ -140,5 +146,68 @@ describe("AddItemForm", () => {
 
     resolve({ ok: true });
     await waitFor(() => expect(push).toHaveBeenCalledWith("/list"));
+  });
+
+  // Edit-режим (D-01/D-02): та же форма с mode="edit" + initialValues (из
+  // покупки, деньги уже в рублях ÷100). Предзаполнение, видимость monthlyPayment
+  // при isCredit, вызов updateItem и лейбл «Сохранить».
+  describe("edit-режим", () => {
+    const editValues = {
+      title: "Молоко",
+      category: "home",
+      urgency: "urgent",
+      need: "needed",
+      benefit: "savesResources",
+      doubts: "sure",
+      isCredit: false,
+      price: "199.99", // рубли (÷100 из копеек в RSC-обёртке)
+    } as const;
+
+    it("предзаполняет «Цена» рублёвым значением из initialValues", () => {
+      render(
+        <AddItemForm mode="edit" itemId="item-1" initialValues={editValues} />
+      );
+      expect(screen.getByLabelText("Название")).toHaveValue("Молоко");
+      expect(screen.getByLabelText("Цена")).toHaveValue("199.99");
+    });
+
+    it("показывает и предзаполняет «Ежемесячный платёж» при isCredit=true", () => {
+      render(
+        <AddItemForm
+          mode="edit"
+          itemId="item-1"
+          initialValues={{ ...editValues, isCredit: true, monthlyPayment: "50" }}
+        />
+      );
+      expect(screen.getByLabelText("Ежемесячный платёж")).toHaveValue("50");
+    });
+
+    it("submit-лейбл — «Сохранить»", () => {
+      render(
+        <AddItemForm mode="edit" itemId="item-1" initialValues={editValues} />
+      );
+      expect(
+        screen.getByRole("button", { name: "Сохранить" })
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: "Добавить покупку" })
+      ).not.toBeInTheDocument();
+    });
+
+    it("успешный submit вызывает updateItem один раз и делает push на /list", async () => {
+      const user = userEvent.setup({ pointerEventsCheck: 0 });
+      updateItem.mockResolvedValue({ ok: true });
+
+      render(
+        <AddItemForm mode="edit" itemId="item-1" initialValues={editValues} />
+      );
+
+      await user.click(screen.getByRole("button", { name: "Сохранить" }));
+
+      await waitFor(() => expect(updateItem).toHaveBeenCalledTimes(1));
+      expect(updateItem.mock.calls[0]![0]).toBe("item-1");
+      expect(createItem).not.toHaveBeenCalled();
+      await waitFor(() => expect(push).toHaveBeenCalledWith("/list"));
+    });
   });
 });
