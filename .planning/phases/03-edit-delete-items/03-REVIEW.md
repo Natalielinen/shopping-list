@@ -25,7 +25,7 @@ findings:
   warning: 2
   info: 2
   total: 5
-status: issues_found
+status: resolved
 ---
 
 # Фаза 3: Отчёт code review
@@ -33,7 +33,7 @@ status: issues_found
 **Дата:** 2026-08-02
 **Глубина:** standard
 **Проверено файлов:** 16
-**Статус:** issues_found
+**Статус:** resolved (три подтверждённых замечания CR-01/WR-01/WR-02 исправлены строго TDD-first, см. «Разрешение» ниже)
 
 ## Резюме
 
@@ -64,7 +64,7 @@ Next.js 16 + Drizzle + Better Auth.
 
 ## Критичные
 
-### CR-01: `updateItemForUser` не может очистить nullable-поля — `undefined` игнорируется Drizzle, снятие «в кредит» оставляет устаревший `monthlyPayment`
+### CR-01 [РАЗРЕШЕНО]: `updateItemForUser` не может очистить nullable-поля — `undefined` игнорируется Drizzle, снятие «в кредит» оставляет устаревший `monthlyPayment`
 
 **Файл:** `src/server/repos/items.ts:44-55` (корень), `src/app/(app)/list/[id]/edit/actions.ts:40-51` (источник `undefined`)
 
@@ -117,7 +117,7 @@ await updateItemForUser(user.id, id, {
 
 ## Предупреждения
 
-### WR-01: Server Actions игнорируют `null` из репозитория — no-op update/delete чужой/несуществующей покупки рапортует об успехе
+### WR-01 [РАЗРЕШЕНО]: Server Actions игнорируют `null` из репозитория — no-op update/delete чужой/несуществующей покупки рапортует об успехе
 
 **Файл:** `src/app/(app)/list/[id]/edit/actions.ts:47-52` (update), `66-73` (delete)
 
@@ -143,7 +143,7 @@ return { ok: true };
 
 Аналогично для `deleteItem`.
 
-### WR-02: Форма не сбрасывает `monthlyPayment` при submit, если `isCredit` был снят на момент загрузки
+### WR-02 [РАЗРЕШЕНО]: Форма не сбрасывает `monthlyPayment` при submit, если `isCredit` был снят на момент загрузки
 
 **Файл:** `src/components/items/AddItemForm.tsx:130-158`, `398-446`
 
@@ -194,6 +194,55 @@ async function onSubmit(values: ItemInput) {
 
 ---
 
+## Разрешение
+
+**Дата:** 2026-08-02. Три подтверждённых замечания исправлены строго TDD-first
+(сначала падающий RED-тест, затем GREEN-фикс, отдельными коммитами). Замечания
+уровня «Инфо» (IN-01/IN-02) осознанно оставлены как есть — вне объёма правки.
+
+### CR-01 — очистка nullable-полей на update
+
+- **RED:** `src/server/repos/items.iso.test.ts` — реальная Postgres: создать
+  покупку с `link/description/deadline/price/monthlyPayment`, обновить пустыми
+  значениями (`undefined`), проверить, что колонки стали `null`; отдельно —
+  снятие «в кредит» обнуляет `monthly_payment`; guard: легитимный `price:0`
+  сохраняется.
+- **GREEN:** `src/server/repos/items.ts` — `updateItemForUser` нормализует
+  `undefined → null` для nullable-колонок прямо в `.set({...})` через `?? null`.
+  Это единый write-шов обновления, поэтому фикс работает для всех вызывающих.
+  `?? null` безопасен для денег (`0` не nullish → сохраняется). Create-путь
+  (`.values()`) не тронут.
+
+### WR-01 — no-op update/delete больше не рапортует об успехе
+
+- **RED:** `src/app/(app)/list/[id]/edit/actions.test.ts` — мок репозитория
+  возвращает `null`; `updateItem`/`deleteItem` обязаны вернуть `{ ok: false }` с
+  существующими текстами `SAVE_ERROR`/`DELETE_ERROR`.
+- **GREEN:** `src/app/(app)/list/[id]/edit/actions.ts` — оба экшена проверяют
+  результат репозитория и при `null` (WHERE не нашёл строку: не найдено или не
+  принадлежит пользователю сессии) возвращают `{ ok: false }`. Скоупинг по
+  `userId` не ослаблен.
+
+### WR-02 — устаревший `monthlyPayment` не уходит на submit без кредита
+
+- **RED:** `src/components/items/AddItemForm.test.tsx` — edit-форма с
+  противоречивым `initialValues` (`isCredit:false` + `monthlyPayment:"50"`):
+  submit не должен слать `monthlyPayment`.
+- **GREEN:** `src/components/items/AddItemForm.tsx` — `onSubmit` формирует
+  payload, отбрасывающий `monthlyPayment`, когда `isCredit` ложно, независимо от
+  хендлера чекбокса. Устраняет проблему `shouldUnregister:false` для create и
+  edit путей.
+
+### Верификация (всё зелёное)
+
+- `npx vitest run` — 13 файлов, 160 тестов passed.
+- `npx playwright test` — 10 e2e passed (включая edit/delete specs).
+- `npx tsc --noEmit` — без ошибок.
+- eslint по изменённым файлам — 0 errors (1 pre-existing warning на `form.watch`).
+
+---
+
 _Проверено: 2026-08-02_
 _Reviewer: Claude (gsd-code-reviewer)_
 _Глубина: standard_
+_Разрешение: 2026-08-02 (TDD-first, отдельные коммиты test(03)/fix(03))_
