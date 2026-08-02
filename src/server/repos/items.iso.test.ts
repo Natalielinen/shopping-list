@@ -3,6 +3,7 @@ import { afterAll, beforeEach, describe, expect, it } from "vitest";
 
 import {
   createItemForUser,
+  deleteItemForUser,
   findItemForUser,
   findItemsForUser,
   updateItemForUser,
@@ -176,5 +177,42 @@ describe("findItemForUser — изоляция чтения одной поку�
     expect(forA).not.toBeNull();
     expect(forA!.title).toBe("A-private");
     expect(forA!.userId).toBe(a.id);
+  });
+});
+
+// Изоляция УДАЛЕНИЯ по userId (ITEM-08 / T-3-05, IDOR на удаление). Якорь критерия
+// успеха №3 (SC-3): deleteItemForUser скоупит DELETE `and(eq(id), eq(userId))`,
+// поэтому пользователь B не может удалить покупку A (WHERE не находит строку →
+// .returning() пуст → null, строка A остаётся в БД), а владелец A — может (строка
+// удаляется, findItemsForUser(A) больше её не содержит). Hard delete (D-05).
+describe("deleteItemForUser — изоляция удаления по userId (T-3-05 / AUTH-04)", () => {
+  it("пользователь B не может удалить покупку A (возврат null, покупка A на месте)", async () => {
+    const a = await seedUser("a@test.dev");
+    const b = await seedUser("b@test.dev");
+    const itemA = await seedItem(a.id, { title: "A-private" });
+
+    const result = await deleteItemForUser(b.id, itemA.id);
+
+    expect(result).toBeNull();
+
+    // Покупка A не удалена — по-прежнему в списке владельца.
+    const aItems = await findItemsForUser(a.id);
+    expect(aItems).toHaveLength(1);
+    expect(aItems[0]!.title).toBe("A-private");
+  });
+
+  it("владелец A удаляет свою покупку и получает удалённую строку", async () => {
+    const a = await seedUser("a@test.dev");
+    const itemA = await seedItem(a.id, { title: "A-private" });
+
+    const result = await deleteItemForUser(a.id, itemA.id);
+
+    expect(result).not.toBeNull();
+    expect(result!.id).toBe(itemA.id);
+    expect(result!.userId).toBe(a.id);
+
+    // После удаления список владельца пуст.
+    const aItems = await findItemsForUser(a.id);
+    expect(aItems).toEqual([]);
   });
 });

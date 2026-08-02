@@ -10,11 +10,12 @@ vi.mock("@/server/auth/current-user", () => ({
 }));
 vi.mock("@/server/repos/items", () => ({
   updateItemForUser: vi.fn(),
+  deleteItemForUser: vi.fn(),
 }));
 
-import { updateItem } from "./actions";
+import { deleteItem, updateItem } from "./actions";
 import { requireUser } from "@/server/auth/current-user";
-import { updateItemForUser } from "@/server/repos/items";
+import { deleteItemForUser, updateItemForUser } from "@/server/repos/items";
 
 const ITEM_ID = "item-1";
 
@@ -86,5 +87,42 @@ describe("updateItem — перевод рубли→копейки + изоля
     // Первый аргумент updateItemForUser — userId из requireUser (u1), не «attacker».
     const [userId] = vi.mocked(updateItemForUser).mock.calls[0]!;
     expect(userId).toBe("u1");
+  });
+});
+
+// deleteItem — Server Action удаления (ITEM-08 / D-06). БЕЗ payload-валидации
+// (только id + scoping по userId из сессии). Проверяем: проброс userId сессии + id
+// в deleteItemForUser, возврат { ok } и обработку ошибки репозитория.
+describe("deleteItem — изоляция по userId + обработка ошибок (D-06 / T-3-05)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(requireUser).mockResolvedValue({ id: "u1" } as never);
+    vi.mocked(deleteItemForUser).mockResolvedValue({} as never);
+  });
+
+  it("вызывает deleteItemForUser с userId сессии и переданным id", async () => {
+    const res = await deleteItem(ITEM_ID);
+
+    expect(res.ok).toBe(true);
+    expect(deleteItemForUser).toHaveBeenCalledTimes(1);
+    expect(deleteItemForUser).toHaveBeenCalledWith("u1", ITEM_ID);
+  });
+
+  it("userId берётся из сессии (requireUser), а не из аргумента", async () => {
+    await deleteItem(ITEM_ID);
+
+    const [userId] = vi.mocked(deleteItemForUser).mock.calls[0]!;
+    expect(userId).toBe("u1");
+  });
+
+  it("при исключении репозитория возвращает { ok: false } с delete-текстом", async () => {
+    vi.mocked(deleteItemForUser).mockRejectedValueOnce(new Error("db down"));
+
+    const res = await deleteItem(ITEM_ID);
+
+    expect(res.ok).toBe(false);
+    if (!res.ok) {
+      expect(res.error).toBe("Не удалось удалить покупку. Попробуйте ещё раз.");
+    }
   });
 });
