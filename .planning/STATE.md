@@ -4,15 +4,15 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 3
 current_phase_name: Редактирование и удаление покупок
-status: planning
+status: executing
 stopped_at: Phase 3 UI-SPEC approved
-last_updated: "2026-08-02T05:37:08.076Z"
+last_updated: "2026-08-02T06:13:55.986Z"
 last_activity: 2026-08-01
 last_activity_desc: Phase 2 complete, transitioned to Phase 3
 progress:
   total_phases: 3
   completed_phases: 2
-  total_plans: 9
+  total_plans: 11
   completed_plans: 9
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-08-01)
 
 Phase: 3 — Редактирование и удаление покупок
 Plan: Not started
-Status: Ready to plan
+Status: Ready to execute
 Last activity: 2026-08-01 — Phase 2 complete, transitioned to Phase 3
 
 Progress: [██████████] 100%
