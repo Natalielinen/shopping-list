@@ -4,15 +4,15 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 4
 current_phase_name: Список — сортировка, фильтры и архив
-status: planning
+status: executing
 stopped_at: Phase 4 UI-SPEC approved
-last_updated: "2026-08-02T11:33:00.785Z"
+last_updated: "2026-08-02T12:16:37.972Z"
 last_activity: 2026-08-02
 last_activity_desc: Phase 03 complete, transitioned to Phase 4
 progress:
   total_phases: 4
   completed_phases: 3
-  total_plans: 11
+  total_plans: 15
   completed_plans: 11
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-08-02)
 
 Phase: 4 — Список — сортировка, фильтры и архив
 Plan: Not started
-Status: Ready to plan
+Status: Ready to execute
 Last activity: 2026-08-02 — Phase 03 complete, transitioned to Phase 4
 
 Progress: [██████████] 100%
