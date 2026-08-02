@@ -88,6 +88,21 @@ describe("updateItem — перевод рубли→копейки + изоля
     const [userId] = vi.mocked(updateItemForUser).mock.calls[0]!;
     expect(userId).toBe("u1");
   });
+
+  // WR-01: репозиторий возвращает null, когда WHERE не нашёл строку (чужая или
+  // несуществующая покупка — no-op). Экшен обязан отразить это как { ok: false },
+  // а не рапортовать об успехе (иначе клиент навигирует на /list, хотя ничего не
+  // изменилось). Scoping по userId при этом не ослабляется.
+  it("возвращает { ok: false }, когда updateItemForUser вернул null (no-op/чужая покупка)", async () => {
+    vi.mocked(updateItemForUser).mockResolvedValueOnce(null as never);
+
+    const res = await updateItem(ITEM_ID, { ...validInput });
+
+    expect(res.ok).toBe(false);
+    if (!res.ok) {
+      expect(res.error).toBe("Не удалось сохранить изменения. Попробуйте ещё раз.");
+    }
+  });
 });
 
 // deleteItem — Server Action удаления (ITEM-08 / D-06). БЕЗ payload-валидации
@@ -117,6 +132,20 @@ describe("deleteItem — изоляция по userId + обработка ош�
 
   it("при исключении репозитория возвращает { ok: false } с delete-текстом", async () => {
     vi.mocked(deleteItemForUser).mockRejectedValueOnce(new Error("db down"));
+
+    const res = await deleteItem(ITEM_ID);
+
+    expect(res.ok).toBe(false);
+    if (!res.ok) {
+      expect(res.error).toBe("Не удалось удалить покупку. Попробуйте ещё раз.");
+    }
+  });
+
+  // WR-01: deleteItemForUser возвращает null, когда WHERE не нашёл строку (чужая
+  // или несуществующая покупка — no-op). Экшен обязан вернуть { ok: false }, а не
+  // рапортовать об успехе удаления того, чего не удалял.
+  it("возвращает { ok: false }, когда deleteItemForUser вернул null (no-op/чужая покупка)", async () => {
+    vi.mocked(deleteItemForUser).mockResolvedValueOnce(null as never);
 
     const res = await deleteItem(ITEM_ID);
 
