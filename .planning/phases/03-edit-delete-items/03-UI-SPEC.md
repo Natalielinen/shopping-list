@@ -1,10 +1,11 @@
 ---
 phase: 3
 slug: edit-delete-items
-status: draft
+status: approved
 shadcn_initialized: true
 preset: "shadcn/ui — style radix-nova, base color neutral, CSS variables (OKLCH), Tailwind v4"
 created: 2026-08-02
+reviewed_at: 2026-08-02
 ---
 
 # Phase 3 — UI Design Contract
@@ -177,7 +178,7 @@ CardContent (flex-col gap-2)
 
 > Shape-rooted покрытие UI-*состояний*. Прогон `ui-consideration-probe` по НОВЫМ поверхностям Фазы 3 (S1 edit-форма, S2 иконки действий, S3 AlertDialog, S4 загрузка edit-маршрута). Внутренние состояния формы (пустая/частичная/валидация/pending/long-text полей) **наследуются из `02-UI-SPEC.md` §UI Considerations E1** и здесь не рестейтятся — только дельты edit. Copy пустого/ошибочного — в `## Copywriting Contract` выше.
 
-Applicable state considerations resolved: **10 covered, 2 backstop, 0 unresolved** (+ наследуемые состояния формы из Фазы 2 E1).
+Applicable state considerations resolved: **10 covered, 2 backstop, 0 unresolved**. Остальные ячейки 32-сетки (8 категорий × S1–S4) — dismissed N/A, covered структурно, или наследуются из Фазы 2 E1 (перечислены ниже — без молчаливых пропусков).
 
 | Category | Element(s) | Status | Resolution / Reason |
 |----------|------------|--------|---------------------|
@@ -196,10 +197,13 @@ Applicable state considerations resolved: **10 covered, 2 backstop, 0 unresolved
 
 **Наследуется из `02-UI-SPEC.md` E1 (не рестейтится):** пустая форма, per-field валидация, длинный текст в `Input`/`Textarea`, прокрутка при экранной клавиатуре, условный `monthlyPayment` — поведение идентично, т.к. `AddItemForm` переиспользуется целиком (D-01).
 
-**Dismissed — N/A (иконки действий, S2):**
+**Dismissed / inherited — остальные ячейки 32-сетки (probe reconciliation, без молчаливых пропусков):**
 - **S2 · empty / partial / zero-one-many** — N/A: иконки статичны, рендерятся из уже загруженных данных карточки; своего пустого/частичного/множественного состояния нет.
 - **S2 · loading / error** — N/A: иконки не имеют собственного async-состояния (как badge E2 в Фазе 2); async возникает только при тапе (покрыто S3).
+- **S2 · overflow** — ✅ covered структурно: триггер разбивки `flex-1 min-w-0` сжимается, иконки `shrink-0` фиксированы → ряд действий не переполняется по горизонтали (тесно связано с long-text backstop выше).
 - **S3 · empty / partial / overflow / long-text** — N/A: текст диалога фиксированный и короткий, динамического контента нет.
+- **S4 · empty / partial / overflow** — N/A: маршрут грузит одну покупку; «нет данных» == `notFound()` (покрыто S4 · error), частичного/overflow-состояния у fetch нет.
+- **S4 · long-text** — наследуется из E1: длинные значения полей рендерятся в предзаполненной форме по правилам Фазы 2 E1.
 
 ---
 
@@ -215,11 +219,11 @@ Applicable state considerations resolved: **10 covered, 2 backstop, 0 unresolved
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS (FLAG non-blocking — submit-лейбл «Сохранить» одиночным глаголом; принято, контекст заголовка «Редактировать покупку» снимает двусмысленность)
+- [x] Dimension 2 Visuals: PASS
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved (gsd-ui-checker, 2026-08-02) — 6/6 измерений пройдено, 1 non-blocking FLAG принят
