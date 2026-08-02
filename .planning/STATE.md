@@ -5,8 +5,8 @@ milestone_name: milestone
 current_phase: 4
 current_phase_name: Список — сортировка, фильтры и архив
 status: planning
-stopped_at: Phase 4 context gathered
-last_updated: "2026-08-02T11:20:53.927Z"
+stopped_at: Phase 4 UI-SPEC approved
+last_updated: "2026-08-02T11:33:00.785Z"
 last_activity: 2026-08-02
 last_activity_desc: Phase 03 complete, transitioned to Phase 4
 progress:
@@ -121,6 +121,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-02T11:20:53.913Z
-Stopped at: Phase 4 context gathered
-Resume file: .planning/phases/04-list-sort-filter-archive/04-CONTEXT.md
+Last session: 2026-08-02T11:33:00.772Z
+Stopped at: Phase 4 UI-SPEC approved
+Resume file: .planning/phases/04-list-sort-filter-archive/04-UI-SPEC.md
