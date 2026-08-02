@@ -156,6 +156,90 @@ describe("updateItemForUser — изоляция записи по userId (T-3-0
   });
 });
 
+// Очистка nullable-полей на UPDATE (CR-01). Проверяется на РЕАЛЬНОЙ тестовой
+// Postgres: Drizzle `.set()` ИСКЛЮЧАЕТ ключи со значением `undefined` из
+// сгенерированного SQL UPDATE, поэтому ранее заданные nullable-колонки
+// (link/description/deadline/price/monthlyPayment) невозможно было очистить через
+// форму — старое значение оставалось. updateItemForUser обязан нормализовать
+// `undefined → null`, чтобы UPDATE явно писал `SET col = NULL`.
+describe("updateItemForUser — очистка nullable-полей на UPDATE (CR-01)", () => {
+  const filledData = {
+    title: "A-filled",
+    category: "home",
+    urgency: "urgent",
+    need: "needed",
+    benefit: "savesResources",
+    doubts: "sure",
+    isCredit: true,
+    link: "https://example.com",
+    description: "заметка",
+    deadline: new Date("2026-12-31"),
+    price: 19999, // копейки
+    monthlyPayment: 5000, // копейки
+  } as const;
+
+  const clearedData = {
+    title: "A-cleared",
+    category: "home",
+    urgency: "urgent",
+    need: "needed",
+    benefit: "savesResources",
+    doubts: "sure",
+    isCredit: false,
+    // Все nullable-поля очищены (форма шлёт undefined для пустых значений).
+    link: undefined,
+    description: undefined,
+    deadline: undefined,
+    price: undefined,
+    monthlyPayment: undefined,
+  } as const;
+
+  it("очищает link/description/deadline/price при обновлении пустыми значениями", async () => {
+    const a = await seedUser("a@test.dev");
+    const created = await createItemForUser(a.id, { ...filledData });
+
+    // Санити: nullable-поля действительно заданы после create.
+    expect(created!.link).toBe("https://example.com");
+    expect(created!.description).toBe("заметка");
+    expect(created!.price).toBe(19999);
+
+    const updated = await updateItemForUser(a.id, created!.id, {
+      ...clearedData,
+    });
+
+    expect(updated).not.toBeNull();
+
+    // Ре-чтение из БД: колонки обнулены (а не сохранили старое значение).
+    const [row] = await findItemsForUser(a.id);
+    expect(row!.link).toBeNull();
+    expect(row!.description).toBeNull();
+    expect(row!.deadline).toBeNull();
+    expect(row!.price).toBeNull();
+  });
+
+  it("снятие «в кредит» (isCredit:false + monthlyPayment undefined) обнуляет monthly_payment", async () => {
+    const a = await seedUser("a@test.dev");
+    const created = await createItemForUser(a.id, { ...filledData });
+    expect(created!.monthlyPayment).toBe(5000);
+
+    await updateItemForUser(a.id, created!.id, { ...clearedData });
+
+    const [row] = await findItemsForUser(a.id);
+    expect(row!.isCredit).toBe(false);
+    expect(row!.monthlyPayment).toBeNull();
+  });
+
+  it("легитимный ноль (price:0) сохраняется, а не превращается в null", async () => {
+    const a = await seedUser("a@test.dev");
+    const created = await createItemForUser(a.id, { ...filledData });
+
+    await updateItemForUser(a.id, created!.id, { ...clearedData, price: 0 });
+
+    const [row] = await findItemsForUser(a.id);
+    expect(row!.price).toBe(0);
+  });
+});
+
 // Изоляция ЧТЕНИЯ одной покупки по userId (ITEM-07 / T-3-02, IDOR на чтение).
 // findItemForUser скоупит SELECT по userId → чужая/несуществующая покупка → null
 // (RSC-обёртка вызовет notFound(), форма не предзаполнится чужими данными).
