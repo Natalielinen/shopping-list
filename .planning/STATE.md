@@ -5,8 +5,8 @@ milestone_name: milestone
 current_phase: 3
 current_phase_name: Редактирование и удаление покупок
 status: planning
-stopped_at: Phase 3 context gathered
-last_updated: "2026-08-02T05:03:31.037Z"
+stopped_at: Phase 3 UI-SPEC approved
+last_updated: "2026-08-02T05:37:08.076Z"
 last_activity: 2026-08-01
 last_activity_desc: Phase 2 complete, transitioned to Phase 3
 progress:
@@ -115,6 +115,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-02T05:03:31.020Z
-Stopped at: Phase 3 context gathered
-Resume file: .planning/phases/03-edit-delete-items/03-CONTEXT.md
+Last session: 2026-08-02T05:37:08.062Z
+Stopped at: Phase 3 UI-SPEC approved
+Resume file: D:/myProjects/shopping-list/.planning/phases/03-edit-delete-items/03-UI-SPEC.md
