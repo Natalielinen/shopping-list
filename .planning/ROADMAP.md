@@ -125,7 +125,21 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Фильтр «показывать купленные» возвращает архивные покупки в видимый список.
   5. Список и элементы управления удобны на телефоне (mobile-first, достаточные зоны нажатия).
 
-**Plans**: TBD
+**Plans**: 4 plans
+
+**Wave 1**
+
+- [ ] 04-01-PLAN.md — Статус «куплено»: миграция схемы (purchasedAt) + изолированный write-шов setItemPurchasedForUser (IDOR-тест, LIST-04)
+- [ ] 04-02-PLAN.md — Чистая логика сортировки/партиции (TDD-ядро): компараторы трёх режимов + архив purchasedAt убыв. (LIST-01/02/03/05)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 04-03-PLAN.md — Tracer: отметить покупку купленной end-to-end (чекбокс → Server Action scoped → архив + undo-тост) + монтаж sonner (LIST-04/08)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 04-04-PLAN.md — Панель сортировки/фильтра (Select + фильтр) + секция «Куплено» + empty-состояния + mobile-first бэкстоп (LIST-01/02/03/05/08)
+
 **UI hint**: yes
 
 ### Phase 5: Зависимости и блокировка
@@ -153,5 +167,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Фундамент и аутентификация | 4/4 | Complete    | 2026-08-01 |
 | 2. Добавление покупок с автоматическим приоритетом | 5/5 | Complete    | 2026-08-01 |
 | 3. Редактирование и удаление покупок | 2/2 | Complete    | 2026-08-02 |
-| 4. Список — сортировка, фильтры и архив | 0/TBD | Not started | - |
+| 4. Список — сортировка, фильтры и архив | 0/4 | Not started | - |
 | 5. Зависимости и блокировка | 0/TBD | Not started | - |
