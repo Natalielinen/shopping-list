@@ -2,7 +2,7 @@
 
 import { itemInputSchema, type ItemInput } from "@/lib/validation/item";
 import { requireUser } from "@/server/auth/current-user";
-import { updateItemForUser } from "@/server/repos/items";
+import { deleteItemForUser, updateItemForUser } from "@/server/repos/items";
 
 // Server Action обновления покупки (ITEM-07 / D-03) — зеркалит createItem.
 //
@@ -52,5 +52,26 @@ export async function updateItem(
     return { ok: true };
   } catch {
     return { ok: false, error: SAVE_ERROR };
+  }
+}
+
+// Server Action удаления покупки (ITEM-08 / D-06) — зеркалит updateItem, но БЕЗ
+// payload-валидации: удаление принимает только `id`, единственная защита — scoping
+// по userId из сессии (D-06). Hard delete (D-05). Навигацию (router.refresh) делает
+// клиент после { ok: true }; здесь redirect() не вызывается (Pitfall 7).
+const DELETE_ERROR = "Не удалось удалить покупку. Попробуйте ещё раз.";
+
+export type DeleteItemResult = { ok: true } | { ok: false; error: string };
+
+export async function deleteItem(id: string): Promise<DeleteItemResult> {
+  // userId — из сессии (T-3-05); deleteItemForUser скоупит DELETE, чужую покупку
+  // удалить нельзя. id никогда не определяет владельца.
+  const user = await requireUser();
+
+  try {
+    await deleteItemForUser(user.id, id);
+    return { ok: true };
+  } catch {
+    return { ok: false, error: DELETE_ERROR };
   }
 }

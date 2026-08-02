@@ -53,3 +53,16 @@ export async function updateItemForUser(
     .returning();
   return row ?? null;
 }
+
+// Write-seam удаления покупки (ITEM-08 / T-3-05, IDOR на удаление). Тот же шов
+// изоляции: `userId` из серверной сессии скоупит DELETE вместе с `id`. Hard delete
+// (D-05 — без архива/undo, восстановление — Фаза 4). При несовпадении владельца
+// WHERE не находит строку → .returning() пуст → null (no-op, чужую покупку удалить
+// нельзя). При успехе возвращает удалённую строку (владелец подтверждён).
+export async function deleteItemForUser(userId: string, id: string) {
+  const [row] = await db
+    .delete(items)
+    .where(and(eq(items.id, id), eq(items.userId, userId)))
+    .returning();
+  return row ?? null;
+}
