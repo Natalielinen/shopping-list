@@ -41,6 +41,15 @@ export async function findItemForUser(userId: string, id: string) {
 // не находит строку → .returning() пуст → null (no-op, IDOR на запись невозможен).
 // Тип `data` — тот же ItemInsertData, что у createItemForUser (id/userId/createdAt
 // исключены, mass-assignment владельца невозможен, Security V4).
+//
+// CR-01: Drizzle `.set()` ИСКЛЮЧАЕТ ключи со значением `undefined` из
+// сгенерированного SQL UPDATE (штатное поведение — чтобы обнулить колонку, нужен
+// `null`, а не `undefined`). Форма шлёт `undefined` для очищенных необязательных
+// полей, поэтому здесь — на едином write-шве update — нормализуем `undefined → null`
+// для nullable-колонок (link/description/deadline/price/monthlyPayment), чтобы
+// очистка поля персистилась как `SET col = NULL`. `?? null` безопасен для денег:
+// легитимный `0` не является nullish и сохраняется. Create-путь (`.values()`) не
+// трогаем — на INSERT `undefined` и так даёт NULL (дефолт колонки).
 export async function updateItemForUser(
   userId: string,
   id: string,
@@ -48,7 +57,14 @@ export async function updateItemForUser(
 ) {
   const [row] = await db
     .update(items)
-    .set(data)
+    .set({
+      ...data,
+      link: data.link ?? null,
+      description: data.description ?? null,
+      deadline: data.deadline ?? null,
+      price: data.price ?? null,
+      monthlyPayment: data.monthlyPayment ?? null,
+    })
     .where(and(eq(items.id, id), eq(items.userId, userId)))
     .returning();
   return row ?? null;
