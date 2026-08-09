@@ -22,6 +22,12 @@ const STATUS_ERROR = "Не удалось обновить статус. Поп�
 //
 // Тап по чекбоксу НЕ переключает Collapsible разбивки (другой ряд карточки,
 // §Pitfall 7 / LIST-07): три независимых тач-цели ≥44px.
+//
+// Размер (G-04-2 / UI-SPEC §Spacing): видимый глиф — обычного размера (size-5),
+// а требуемая тач-зона ≥44px обеспечивается обёрткой-<label> (h-11 w-11) вокруг
+// чекбокса. Клик по всей зоне форвардится label'ом на вложенный labelable button
+// чекбокса → onCheckedChange срабатывает по тапу в любой точке зоны. Обёртка
+// оборачивает ТОЛЬКО чекбокс, поэтому Collapsible разбивки не затрагивается.
 export function PurchaseCheckbox({
   id,
   purchased,
@@ -62,12 +68,17 @@ export function PurchaseCheckbox({
   }
 
   return (
-    <Checkbox
-      checked={optimistic}
-      disabled={isPending}
-      onCheckedChange={(v) => toggle(v === true)}
-      aria-label={optimistic ? "Вернуть в активные" : "Отметить купленной"}
-      className="h-11 w-11 shrink-0"
-    />
+    // Обёртка-тач-зона 44×44px (§Spacing / G-04-2): label форвардит тап на
+    // вложенный чекбокс, поэтому клик по всей зоне переключает статус, а сам
+    // глиф остаётся нормального размера (size-5).
+    <label className="flex h-11 w-11 shrink-0 items-center justify-center">
+      <Checkbox
+        checked={optimistic}
+        disabled={isPending}
+        onCheckedChange={(v) => toggle(v === true)}
+        aria-label={optimistic ? "Вернуть в активные" : "Отметить купленной"}
+        className="size-5"
+      />
+    </label>
   );
 }
