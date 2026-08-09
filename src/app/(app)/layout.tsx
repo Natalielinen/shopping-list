@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
 import { AppHeader } from "@/components/app/AppHeader";
+import { Toaster } from "@/components/ui/sonner";
 
 // СЕРВЕРНЫЙ guard группы `(app)` — граница безопасности (Pattern 3): реальная
 // проверка сессии выполняется на сервере через `auth.api.getSession`, а не
@@ -22,6 +23,9 @@ export default async function AppLayout({
     <div className="flex min-h-full flex-col">
       <AppHeader email={session.user.email} />
       <main className="flex flex-1 flex-col">{children}</main>
+      {/* Undo-тост (D-04) — смонтирован один раз для всей группы (app).
+          `bottom-center` не перекрывает панель управления сверху (UI-SPEC). */}
+      <Toaster position="bottom-center" richColors={false} />
     </div>
   );
 }
