@@ -5,15 +5,15 @@ milestone_name: milestone
 current_phase: 04
 current_phase_name: list-sort-filter-archive
 status: executing
-stopped_at: Completed 04-02-PLAN.md
-last_updated: "2026-08-09T05:58:11.938Z"
+stopped_at: Completed 04-03-PLAN.md
+last_updated: "2026-08-09T06:08:43.731Z"
 last_activity: 2026-08-09
 last_activity_desc: Phase 04 execution started
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 15
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 # Project State
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-08-02)
 ## Current Position
 
 Phase: 04 (list-sort-filter-archive) — EXECUTING
-Plan: 3 of 4
+Plan: 4 of 4
 Status: Ready to execute
 Last activity: 2026-08-09 — Phase 04 execution started
 
-Progress: [█████████░] 87%
+Progress: [█████████░] 93%
 
 ## Performance Metrics
 
@@ -72,6 +72,7 @@ Progress: [█████████░] 87%
 | Phase 03 P02 | 5min | 3 tasks | 9 files |
 | Phase 04 P01 | 12min | 3 tasks | 6 files |
 | Phase 04 P02 | 6min | 1 tasks | 2 files |
+| Phase 04 P03 | 6min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -99,6 +100,9 @@ Recent decisions affecting current work:
 - [Phase ?]: 03-02: удаление (ITEM-08) — deleteItemForUser со scoping по userId (IDOR T-3-05) + deleteItem без payload-валидации (D-06); AlertDialog confirm, e.preventDefault() держит диалог открытым при ошибке (D-05/T-3-06)
 - [Phase ?]: 03-02: AlertDialog взят из уже установленного unified-пакета radix-ui (нулевой прирост supply-chain), а не отдельного @radix-ui/react-alert-dialog
 - [Phase ?]: 04-01 D-07: статус «куплено» = одна nullable purchased_at timestamp (option-a), null=активна
+- [Phase ?]: 04-03: useOptimistic+useTransition+router.refresh в одном startTransition — реконсиляция без отскока (A1 подтверждена, фолбэк не нужен)
+- [Phase ?]: 04-03: граница RSC→client на примитивах (total/createdAtMs/purchasedAtMs) — ListView получает ListViewItem, breakdown уцелевает через переупорядочивание ссылок
+- [Phase ?]: 04-03: sonner theme=light, next-themes удалён; тост возврата без кнопки Отменить (Open Question 1)
 
 ### Pending Todos
 
@@ -124,6 +128,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-09T05:58:11.918Z
-Stopped at: Completed 04-02-PLAN.md
+Last session: 2026-08-09T06:08:33.141Z
+Stopped at: Completed 04-03-PLAN.md
 Resume file: None
