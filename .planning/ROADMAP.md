@@ -140,6 +140,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] 04-04-PLAN.md — Панель сортировки/фильтра (Select + фильтр) + секция «Куплено» + empty-состояния + mobile-first бэкстоп (LIST-01/02/03/05/08 — LIST-08 бэкстоп 375px отложен в UAT)
 
+**Gap closure** *(из UAT — G-04-2)*
+
+- [ ] 04-05-PLAN.md — Косметика чекбокса «куплено»: обёртка-тач-зона 44px + нормальный глиф (size-5), TDD RED→GREEN (LIST-08 / G-04-2)
+
 **UI hint**: yes
 
 ### Phase 5: Зависимости и блокировка
