@@ -70,7 +70,7 @@ describe("ListControls", () => {
 
     await user.click(screen.getByRole("combobox", { name: "Сортировка" }));
     await user.click(
-      await screen.findByRole("option", { name: "По алфавиту", exact: true })
+      await screen.findByRole("option", { name: "По алфавиту" })
     );
 
     expect(onSortKeyChange).toHaveBeenCalledTimes(1);
@@ -85,7 +85,6 @@ describe("ListControls", () => {
     await user.click(
       await screen.findByRole("option", {
         name: "По дате добавления",
-        exact: true,
       })
     );
 
