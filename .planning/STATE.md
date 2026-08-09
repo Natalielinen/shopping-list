@@ -5,15 +5,15 @@ milestone_name: milestone
 current_phase: 04
 current_phase_name: list-sort-filter-archive
 status: human_needed
-stopped_at: Completed 04-04-PLAN.md (LIST-08 375px бэкстоп отложен в UAT)
-last_updated: "2026-08-09T06:25:01Z"
+stopped_at: Completed 04-05-PLAN.md
+last_updated: "2026-08-09T07:48:30.289Z"
 last_activity: 2026-08-09
-last_activity_desc: Завершён план 04-04; фаза 4 ждёт UAT (визуальный бэкстоп 375px)
+last_activity_desc: Завершён план 04-04; фаза 4 ждёт UAT
 progress:
   total_phases: 4
-  completed_phases: 3
-  total_plans: 15
-  completed_plans: 15
+  completed_phases: 4
+  total_plans: 16
+  completed_plans: 16
 ---
 
 # Project State
@@ -28,9 +28,9 @@ See: .planning/PROJECT.md (updated 2026-08-02)
 ## Current Position
 
 Phase: 04 (list-sort-filter-archive) — HUMAN NEEDED (UAT)
-Plan: 4 of 4 — выполнен
-Status: Все 4 плана выполнены; фаза ждёт UAT — визуальный бэкстоп 375px (LIST-08) в /gsd-verify-work 4
-Last activity: 2026-08-09 — Завершён план 04-04; фаза 4 ждёт UAT
+Plan: 5 of 5 — выполнен (gap-closure 04-05)
+Status: Все 5 планов выполнены; gap G-04-2 (размер чекбокса) закрыт в 04-05. Фаза ждёт UAT — визуальный бэкстоп 375px (LIST-08) в /gsd-verify-work 4
+Last activity: 2026-08-09 — Завершён gap-closure план 04-05 (обёртка-тач-зона 44px + глиф size-5); фаза 4 ждёт UAT
 
 Progress: [██████████] 100%
 
@@ -74,6 +74,7 @@ Progress: [██████████] 100%
 | Phase 04 P02 | 6min | 1 tasks | 2 files |
 | Phase 04 P03 | 6min | 2 tasks | 10 files |
 | Phase 04 P04 | 15min | 3 tasks | 5 files |
+| Phase 04 P05 | ~10min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -106,6 +107,7 @@ Recent decisions affecting current work:
 - [Phase ?]: 04-03: sonner theme=light, next-themes удалён; тост возврата без кнопки Отменить (Open Question 1)
 - [Phase ?]: 04-04: ListControls — контролируемый client-leaf без состояния (sortKey/showPurchased держит ListView, эфемерный useState, D-09); партиция ДО сортировки (§Pitfall 1 — архив всегда sortPurchased); купленная карточка — избыточный канал статуса (opacity-70 + line-through, не только цвет)
 - [Phase ?]: 04-04: визуальный бэкстоп 375px (LIST-08) отложен в UAT (/gsd-verify-work 4), как визуальные бэкстопы Фазы 3 — не сфабрикован, ждёт человека
+- [Phase ?]: Тач-цель ≥44px чекбокса «куплено» — через обёртку-<label> (h-11 w-11) вокруг глифа size-5, а не раздуванием самого Checkbox (G-04-2)
 
 ### Pending Todos
 
@@ -132,6 +134,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-09T06:25:01Z
-Stopped at: Completed 04-04-PLAN.md (фаза 4 ждёт UAT — LIST-08 бэкстоп 375px)
+Last session: 2026-08-09T07:48:19.572Z
+Stopped at: Completed 04-05-PLAN.md
 Resume file: None
