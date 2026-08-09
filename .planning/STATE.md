@@ -2,18 +2,18 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 4
-current_phase_name: Список — сортировка, фильтры и архив
+current_phase: 04
+current_phase_name: list-sort-filter-archive
 status: executing
-stopped_at: Phase 4 UI-SPEC approved
-last_updated: "2026-08-02T12:16:37.972Z"
-last_activity: 2026-08-02
-last_activity_desc: Phase 03 complete, transitioned to Phase 4
+stopped_at: Completed 04-01-PLAN.md
+last_updated: "2026-08-09T05:53:34.196Z"
+last_activity: 2026-08-09
+last_activity_desc: Phase 04 execution started
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 15
-  completed_plans: 11
+  completed_plans: 12
 ---
 
 # Project State
@@ -23,16 +23,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-02)
 
 **Core value:** Пользователь видит свои покупки автоматически отсортированными по осмысленному приоритету, чтобы понимать, что покупать в первую очередь.
-**Current focus:** Phase 4 — Список — сортировка, фильтры и архив
+**Current focus:** Phase 04 — list-sort-filter-archive
 
 ## Current Position
 
-Phase: 4 — Список — сортировка, фильтры и архив
-Plan: Not started
+Phase: 04 (list-sort-filter-archive) — EXECUTING
+Plan: 2 of 4
 Status: Ready to execute
-Last activity: 2026-08-02 — Phase 03 complete, transitioned to Phase 4
+Last activity: 2026-08-09 — Phase 04 execution started
 
-Progress: [██████████] 100%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
@@ -70,6 +70,7 @@ Progress: [██████████] 100%
 | Phase 02 P05 | 12min | 1 tasks | 4 files |
 | Phase 03 P01 | 8 | 2 tasks | 12 files |
 | Phase 03 P02 | 5min | 3 tasks | 9 files |
+| Phase 04 P01 | 12min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -96,6 +97,7 @@ Recent decisions affecting current work:
 - [Phase ?]: [03-01] Edit-слой: findItemForUser/updateItemForUser со scoping and(eq(id),eq(userId)) (IDOR T-3-01/T-3-02); updateItem рубли→копейки один раз, { ok } без redirect; единая форма add/edit (mode/initialValues); пересчёт badge на чтении (D-08)
 - [Phase ?]: 03-02: удаление (ITEM-08) — deleteItemForUser со scoping по userId (IDOR T-3-05) + deleteItem без payload-валидации (D-06); AlertDialog confirm, e.preventDefault() держит диалог открытым при ошибке (D-05/T-3-06)
 - [Phase ?]: 03-02: AlertDialog взят из уже установленного unified-пакета radix-ui (нулевой прирост supply-chain), а не отдельного @radix-ui/react-alert-dialog
+- [Phase ?]: 04-01 D-07: статус «куплено» = одна nullable purchased_at timestamp (option-a), null=активна
 
 ### Pending Todos
 
@@ -121,6 +123,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-02T11:33:00.772Z
-Stopped at: Phase 4 UI-SPEC approved
-Resume file: .planning/phases/04-list-sort-filter-archive/04-UI-SPEC.md
+Last session: 2026-08-09T05:53:34.176Z
+Stopped at: Completed 04-01-PLAN.md
+Resume file: None
