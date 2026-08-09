@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 04
-current_phase_name: list-sort-filter-archive
-status: human_needed
+current_phase: 5
+current_phase_name: Зависимости и блокировка
+status: planning
 stopped_at: Completed 04-05-PLAN.md
-last_updated: "2026-08-09T07:48:30.289Z"
+last_updated: "2026-08-09T08:17:42.408Z"
 last_activity: 2026-08-09
-last_activity_desc: Завершён план 04-04; фаза 4 ждёт UAT
+last_activity_desc: Phase 04 complete, transitioned to Phase 5
 progress:
   total_phases: 4
   completed_phases: 4
@@ -20,17 +20,17 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-08-02)
+See: .planning/PROJECT.md (updated 2026-08-09)
 
 **Core value:** Пользователь видит свои покупки автоматически отсортированными по осмысленному приоритету, чтобы понимать, что покупать в первую очередь.
-**Current focus:** Phase 04 — list-sort-filter-archive
+**Current focus:** Phase 5 — Зависимости и блокировка
 
 ## Current Position
 
-Phase: 04 (list-sort-filter-archive) — HUMAN NEEDED (UAT)
-Plan: 5 of 5 — выполнен (gap-closure 04-05)
-Status: Все 5 планов выполнены; gap G-04-2 (размер чекбокса) закрыт в 04-05. Фаза ждёт UAT — визуальный бэкстоп 375px (LIST-08) в /gsd-verify-work 4
-Last activity: 2026-08-09 — Завершён gap-closure план 04-05 (обёртка-тач-зона 44px + глиф size-5); фаза 4 ждёт UAT
+Phase: 5 — Зависимости и блокировка
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-08-09 — Phase 04 complete, transitioned to Phase 5
 
 Progress: [██████████] 100%
 
@@ -38,7 +38,7 @@ Progress: [██████████] 100%
 
 **Velocity:**
 
-- Total plans completed: 11
+- Total plans completed: 16
 - Average duration: — min
 - Total execution time: 0.0 hours
 
@@ -49,6 +49,7 @@ Progress: [██████████] 100%
 | 01 | 4 | - | - |
 | 2 | 5 | - | - |
 | 03 | 2 | - | - |
+| 04 | 5 | - | - |
 
 **Recent Trend:**
 
