@@ -6,6 +6,7 @@ import {
   deleteItemForUser,
   findItemForUser,
   findItemsForUser,
+  setItemPurchasedForUser,
   updateItemForUser,
 } from "@/server/repos/items";
 
@@ -298,5 +299,61 @@ describe("deleteItemForUser — изоляция удаления по userId (T
     // После удаления список владельца пуст.
     const aItems = await findItemsForUser(a.id);
     expect(aItems).toEqual([]);
+  });
+});
+
+// Изоляция ЗАПИСИ статуса «куплено» по userId (LIST-04 / T-4-01, IDOR на статус) +
+// обратимость (D-05). Проверяется на РЕАЛЬНОЙ тестовой Postgres:
+// setItemPurchasedForUser скоупит UPDATE `and(eq(id), eq(userId))`, поэтому
+// пользователь B не может изменить статус покупки A (WHERE не находит строку →
+// .returning() пуст → null, строка A не тронута), а владелец A — может, причём
+// обратимо: true → purchasedAt=non-null Date, false → purchasedAt=null (D-07).
+describe("setItemPurchasedForUser — изоляция записи по userId (LIST-04 / D-08)", () => {
+  it("пользователь B не может изменить статус покупки A (возврат null, purchasedAt A остался null)", async () => {
+    const a = await seedUser("a@test.dev");
+    const b = await seedUser("b@test.dev");
+    const itemA = await seedItem(a.id, { title: "A-private" });
+
+    const result = await setItemPurchasedForUser(b.id, itemA.id, true);
+
+    expect(result).toBeNull();
+
+    // Строка A цела: статус не изменился (purchasedAt null), title прежний.
+    const row = await findItemForUser(a.id, itemA.id);
+    expect(row).not.toBeNull();
+    expect(row!.purchasedAt).toBeNull();
+    expect(row!.title).toBe("A-private");
+  });
+
+  it("владелец A отмечает покупку купленной → purchasedAt становится non-null Date (persist)", async () => {
+    const a = await seedUser("a@test.dev");
+    const itemA = await seedItem(a.id, { title: "A-private" });
+
+    const result = await setItemPurchasedForUser(a.id, itemA.id, true);
+
+    expect(result).not.toBeNull();
+    expect(result!.purchasedAt).toBeInstanceOf(Date);
+
+    // Ре-чтение из БД подтверждает персист.
+    const row = await findItemForUser(a.id, itemA.id);
+    expect(row!.purchasedAt).toBeInstanceOf(Date);
+  });
+
+  it("владелец A снимает отметку купленного → purchasedAt снова null (обратимость D-05)", async () => {
+    const a = await seedUser("a@test.dev");
+    // Засеиваем уже купленную покупку.
+    const itemA = await seedItem(a.id, {
+      title: "A-purchased",
+      purchasedAt: new Date(),
+    });
+
+    const result = await setItemPurchasedForUser(a.id, itemA.id, false);
+
+    expect(result).not.toBeNull();
+    expect(result!.purchasedAt).toBeNull();
+
+    // Ре-чтение из БД подтверждает обнуление.
+    const row = await findItemForUser(a.id, itemA.id);
+    expect(row!.purchasedAt).toBeNull();
   });
 });
