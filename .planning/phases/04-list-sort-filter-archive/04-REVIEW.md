@@ -23,10 +23,11 @@ files_reviewed_list:
   - tests/helpers/db.ts
 findings:
   critical: 0
-  warning: 1
+  warning: 0
   info: 2
-  total: 3
+  total: 2
 status: issues_found
+resolution: "WR-01 (mass-assignment defense-in-depth) исправлено в 89d75ef — purchasedAt добавлен в Omit ItemInsertData. Осталось 2 INFO (косметика): дублирование STATUS_ERROR, undo-тост на размонтированном компоненте (функционально работает)."
 ---
 
 # Фаза 4: Отчёт code review
