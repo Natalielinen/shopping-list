@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DeleteItemButton } from "@/components/items/DeleteItemButton";
 import { PriorityBadge } from "@/components/items/PriorityBadge";
+import { PurchaseCheckbox } from "@/components/items/PurchaseCheckbox";
 import { ScoreBreakdown } from "@/components/items/ScoreBreakdown";
 
 // Карточка покупки в списке (LIST-06 / ITEM-07) — RSC. Показывает название
@@ -28,17 +29,23 @@ export function ItemCard({
   title,
   total,
   breakdown,
+  purchased,
 }: {
   id: string;
   title: string;
   total: number;
   breakdown: Contribution[];
+  purchased: boolean;
 }) {
   return (
     <Card>
       <CardContent className="flex flex-col gap-2">
-        <div className="flex items-center justify-between gap-3">
-          <span className="min-w-0 truncate text-xl font-semibold">
+        {/* Ряд заголовка: ведущий чекбокс «куплено» (h-11 w-11) → title
+            (min-w-0 truncate) → badge (shrink-0) — три независимых тач-цели
+            ≥44px, ряд не ломается длинным названием (§Pitfall 7 / UI-SPEC). */}
+        <div className="flex items-center gap-2">
+          <PurchaseCheckbox id={id} purchased={purchased} />
+          <span className="min-w-0 flex-1 truncate text-xl font-semibold">
             {title}
           </span>
           <PriorityBadge total={total} />
