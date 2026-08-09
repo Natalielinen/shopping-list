@@ -1,9 +1,9 @@
 ---
-status: diagnosed
+status: complete
 phase: 04-list-sort-filter-archive
 source: [04-VERIFICATION.md]
 started: 2026-08-09T06:43:40Z
-updated: 2026-08-09T07:00:56Z
+updated: 2026-08-09T07:51:25Z
 ---
 
 ## Current Test
@@ -18,9 +18,11 @@ result: pass
 
 ### 2. Карточка на 375px — усечение title и тап по чекбоксу
 expected: Длинное название покупки усекается (truncate) и не выталкивает badge приоритета и чекбокс «куплено» (тач-зона ≥44px, слева от названия); тап по чекбоксу отмечает купленной и НЕ раскрывает разбивку очков (Collapsible).
-result: issue
+result: pass
 reported: "чекбокс слишком большой"
 severity: cosmetic
+resolved_by: 04-05-PLAN.md
+note: "Исправлено gap-планом 04-05 (глиф size-5 в 44px label-тач-зоне); подтверждено RTL-тестом PurchaseCheckbox.test.tsx. Рекомендуется визуально сверить на 375px при желании."
 
 ### 3. Undo-тост и приглушение купленной карточки
 expected: После отметки купленной undo-тост (bottom-center) не закрывает панель управления сверху; кнопка «Отменить» работает. При включённом фильтре купленная карточка приглушена (opacity-70) И зачёркнута (line-through) — статус читается не только по цвету.
@@ -29,8 +31,8 @@ result: pass
 ## Summary
 
 total: 3
-passed: 2
-issues: 1
+passed: 3
+issues: 0
 pending: 0
 skipped: 0
 blocked: 0
@@ -39,7 +41,9 @@ blocked: 0
 
 - gap_id: G-04-2
   truth: "Чекбокс «куплено» на карточке имеет тач-зону ≥44px, но сам визуальный глиф чекбокса — обычного размера (не 44px-квадрат)"
-  status: failed
+  status: resolved
+  resolved_by: 04-05-PLAN.md
+  resolved_at: 2026-08-09
   reason: "User reported: чекбокс слишком большой"
   severity: cosmetic
   test: 2
