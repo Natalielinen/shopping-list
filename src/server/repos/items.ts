@@ -82,3 +82,24 @@ export async function deleteItemForUser(userId: string, id: string) {
     .returning();
   return row ?? null;
 }
+
+// Write-seam статуса «куплено» (LIST-04 / T-4-01, IDOR на статус). Тот же шов
+// изоляции, что deleteItemForUser: `userId` из серверной сессии скоупит UPDATE
+// вместе с `id`, поэтому пользователь B не может изменить статус покупки A (WHERE
+// не находит строку → .returning() пуст → null, no-op, mass-assignment владельца
+// невозможен — Security V4). Обратимо (D-05/D-07): `purchased=true` пишет
+// `purchasedAt = new Date()` (активна → куплена/в архив), `false` — `null`
+// (обратно в активные). Единственное поле задаётся явным `Date | null`, поэтому
+// нормализация `undefined → null` (CR-01) здесь не нужна.
+export async function setItemPurchasedForUser(
+  userId: string,
+  id: string,
+  purchased: boolean
+) {
+  const [row] = await db
+    .update(items)
+    .set({ purchasedAt: purchased ? new Date() : null })
+    .where(and(eq(items.id, id), eq(items.userId, userId)))
+    .returning();
+  return row ?? null;
+}
