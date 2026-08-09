@@ -155,6 +155,12 @@ export const items = pgTable(
     createdAt: timestamp("created_at")
       .$defaultFn(() => new Date())
       .notNull(),
+    // Статус «куплено» (D-07, Фаза 4). Одна nullable-колонка кодирует и статус,
+    // и ключ сортировки архива: `null` = покупка активна, non-null timestamp =
+    // куплена/в архиве (секция «Куплено» сортируется по purchasedAt убыв.).
+    // Без default → аддитивная миграция, существующие строки → NULL = активны.
+    // На очки НЕ влияет (не входит в ScoredFields/scoring.ts).
+    purchasedAt: timestamp("purchased_at"),
     // ПРИМЕЧАНИЕ: вычисляемые очки (сумма и вклад дедлайна) НЕ хранятся
     // (SCORE-05) — считаются на чтении из текущей даты.
   },

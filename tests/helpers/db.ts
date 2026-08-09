@@ -65,6 +65,9 @@ export async function seedItem(
     benefit?: string;
     doubts?: string;
     isCredit?: boolean;
+    // Статус «куплено» (D-07). По умолчанию не задаётся → NULL = покупка активна
+    // (существующие тесты не ломаются). Задать Date, чтобы засеять купленную покупку.
+    purchasedAt?: Date | null;
   }
 ): Promise<{ id: string }> {
   const id = randomUUID();
@@ -79,6 +82,7 @@ export async function seedItem(
     doubts: (fields.doubts ?? "sure") as never,
     isCredit: fields.isCredit ?? false,
     createdAt: new Date(),
+    purchasedAt: fields.purchasedAt ?? null,
   });
   return { id };
 }
