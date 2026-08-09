@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Pencil } from "lucide-react";
 
 import type { Contribution } from "@/lib/scoring/scoring";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DeleteItemButton } from "@/components/items/DeleteItemButton";
@@ -38,14 +39,24 @@ export function ItemCard({
   purchased: boolean;
 }) {
   return (
-    <Card>
+    // Приглушённое лечение купленной карточки (§Color / UI-SPEC): при purchased
+    // контейнер opacity-70, а title — line-through text-muted-foreground.
+    // Зачёркивание — ИЗБЫТОЧНЫЙ канал статуса (не только прозрачность/цвет):
+    // «куплено» читается по зачёркнутому названию + checked-чекбоксу + отдельной
+    // секции. Активная карточка (purchased=false) — прежнее оформление.
+    <Card className={cn(purchased && "opacity-70")}>
       <CardContent className="flex flex-col gap-2">
         {/* Ряд заголовка: ведущий чекбокс «куплено» (h-11 w-11) → title
             (min-w-0 truncate) → badge (shrink-0) — три независимых тач-цели
             ≥44px, ряд не ломается длинным названием (§Pitfall 7 / UI-SPEC). */}
         <div className="flex items-center gap-2">
           <PurchaseCheckbox id={id} purchased={purchased} />
-          <span className="min-w-0 flex-1 truncate text-xl font-semibold">
+          <span
+            className={cn(
+              "min-w-0 flex-1 truncate text-xl font-semibold",
+              purchased && "text-muted-foreground line-through"
+            )}
+          >
             {title}
           </span>
           <PriorityBadge total={total} />
