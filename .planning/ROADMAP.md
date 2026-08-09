@@ -125,7 +125,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Фильтр «показывать купленные» возвращает архивные покупки в видимый список.
   5. Список и элементы управления удобны на телефоне (mobile-first, достаточные зоны нажатия).
 
-**Plans**: 3/4 plans executed
+**Plans**: 4/4 plans executed
 
 **Wave 1**
 
@@ -138,7 +138,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 04-04-PLAN.md — Панель сортировки/фильтра (Select + фильтр) + секция «Куплено» + empty-состояния + mobile-first бэкстоп (LIST-01/02/03/05/08)
+- [x] 04-04-PLAN.md — Панель сортировки/фильтра (Select + фильтр) + секция «Куплено» + empty-состояния + mobile-first бэкстоп (LIST-01/02/03/05/08 — LIST-08 бэкстоп 375px отложен в UAT)
 
 **UI hint**: yes
 
@@ -167,5 +167,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Фундамент и аутентификация | 4/4 | Complete    | 2026-08-01 |
 | 2. Добавление покупок с автоматическим приоритетом | 5/5 | Complete    | 2026-08-01 |
 | 3. Редактирование и удаление покупок | 2/2 | Complete    | 2026-08-02 |
-| 4. Список — сортировка, фильтры и архив | 3/4 | In Progress|  |
+| 4. Список — сортировка, фильтры и архив | 4/4 | UAT (LIST-08 бэкстоп) |  |
 | 5. Зависимости и блокировка | 0/TBD | Not started | - |

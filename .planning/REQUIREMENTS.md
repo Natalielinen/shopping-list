@@ -43,7 +43,7 @@
 - [x] **LIST-05**: Фильтр «показывать купленные» включает архивные покупки в общий список
 - [x] **LIST-06**: Каждая покупка показывает badge с приоритетом (с меткой/цветом, доступно для восприятия)
 - [x] **LIST-07**: Каждая покупка показывает разбивку приоритета (какие поля сколько очков дали)
-- [ ] **LIST-08**: Интерфейс адаптивный, mobile-first
+- [ ] **LIST-08**: Интерфейс адаптивный, mobile-first _(реализация завершена в 04-04; визуальный бэкстоп на 375px отложен в UAT — /gsd-verify-work 4, не провален)_
 
 ### Dependencies / Blocking
 
@@ -109,7 +109,7 @@
 | LIST-03 | Phase 4 | Complete |
 | LIST-04 | Phase 4 | Complete |
 | LIST-05 | Phase 4 | Complete |
-| LIST-08 | Phase 4 | Pending |
+| LIST-08 | Phase 4 | UAT (бэкстоп 375px) |
 | ITEM-06 | Phase 5 | Pending |
 | DEP-01 | Phase 5 | Pending |
 | DEP-02 | Phase 5 | Pending |

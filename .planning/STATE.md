@@ -4,16 +4,16 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 04
 current_phase_name: list-sort-filter-archive
-status: executing
-stopped_at: Completed 04-03-PLAN.md
-last_updated: "2026-08-09T06:08:43.731Z"
+status: human_needed
+stopped_at: Completed 04-04-PLAN.md (LIST-08 375px бэкстоп отложен в UAT)
+last_updated: "2026-08-09T06:25:01Z"
 last_activity: 2026-08-09
-last_activity_desc: Phase 04 execution started
+last_activity_desc: Завершён план 04-04; фаза 4 ждёт UAT (визуальный бэкстоп 375px)
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 15
-  completed_plans: 14
+  completed_plans: 15
 ---
 
 # Project State
@@ -27,12 +27,12 @@ See: .planning/PROJECT.md (updated 2026-08-02)
 
 ## Current Position
 
-Phase: 04 (list-sort-filter-archive) — EXECUTING
-Plan: 4 of 4
-Status: Ready to execute
-Last activity: 2026-08-09 — Phase 04 execution started
+Phase: 04 (list-sort-filter-archive) — HUMAN NEEDED (UAT)
+Plan: 4 of 4 — выполнен
+Status: Все 4 плана выполнены; фаза ждёт UAT — визуальный бэкстоп 375px (LIST-08) в /gsd-verify-work 4
+Last activity: 2026-08-09 — Завершён план 04-04; фаза 4 ждёт UAT
 
-Progress: [█████████░] 93%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -73,6 +73,7 @@ Progress: [█████████░] 93%
 | Phase 04 P01 | 12min | 3 tasks | 6 files |
 | Phase 04 P02 | 6min | 1 tasks | 2 files |
 | Phase 04 P03 | 6min | 2 tasks | 10 files |
+| Phase 04 P04 | 15min | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -103,6 +104,8 @@ Recent decisions affecting current work:
 - [Phase ?]: 04-03: useOptimistic+useTransition+router.refresh в одном startTransition — реконсиляция без отскока (A1 подтверждена, фолбэк не нужен)
 - [Phase ?]: 04-03: граница RSC→client на примитивах (total/createdAtMs/purchasedAtMs) — ListView получает ListViewItem, breakdown уцелевает через переупорядочивание ссылок
 - [Phase ?]: 04-03: sonner theme=light, next-themes удалён; тост возврата без кнопки Отменить (Open Question 1)
+- [Phase ?]: 04-04: ListControls — контролируемый client-leaf без состояния (sortKey/showPurchased держит ListView, эфемерный useState, D-09); партиция ДО сортировки (§Pitfall 1 — архив всегда sortPurchased); купленная карточка — избыточный канал статуса (opacity-70 + line-through, не только цвет)
+- [Phase ?]: 04-04: визуальный бэкстоп 375px (LIST-08) отложен в UAT (/gsd-verify-work 4), как визуальные бэкстопы Фазы 3 — не сфабрикован, ждёт человека
 
 ### Pending Todos
 
@@ -117,6 +120,7 @@ None yet.
 - ✓ Resolved (Phase 2): значения шкал закрыты — «Жизненно важно»=12 (D-03), DoubtsType 0/−1/−3, BenefitType по SUMMARY; exhaustive Record<Enum,number> без `?? 0`.
 - ✓ Resolved (Phase 2): часовой пояс границы дня — `deadlinePoints` нормализует deadline и `now` к UTC-полуночи перед `differenceInCalendarDays` (WR-01).
 - None open for Phase 3.
+- ⏳ Open (Phase 4): LIST-08 — mobile-first визуальный бэкстоп на 375px отложен в UAT (`/gsd-verify-work 4`). Не провален; реализация (панель, приглушение, тост) завершена, ждёт ручного подтверждения тач-зон/sticky/усечения.
 
 ## Deferred Items
 
@@ -128,6 +132,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-09T06:08:33.141Z
-Stopped at: Completed 04-03-PLAN.md
+Last session: 2026-08-09T06:25:01Z
+Stopped at: Completed 04-04-PLAN.md (фаза 4 ждёт UAT — LIST-08 бэкстоп 375px)
 Resume file: None
