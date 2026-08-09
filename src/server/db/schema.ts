@@ -171,7 +171,11 @@ export type User = typeof user.$inferSelect;
 export type Item = typeof items.$inferSelect;
 export type NewItem = typeof items.$inferInsert;
 
-// Данные для вставки покупки: поля покупки без серверно-управляемых id/userId/
-// createdAt. `userId` подмешивается репозиторием из сессии (никогда из payload —
-// mass-assignment, Security V4).
-export type ItemInsertData = Omit<NewItem, "id" | "userId" | "createdAt">;
+// Данные для вставки/обновления покупки: поля покупки без серверно-управляемых
+// id/userId/createdAt/purchasedAt. `userId` подмешивается репозиторием из сессии,
+// а `purchasedAt` пишется ТОЛЬКО через setItemPurchasedForUser — никогда из payload
+// create/update (mass-assignment, Security V4).
+export type ItemInsertData = Omit<
+  NewItem,
+  "id" | "userId" | "createdAt" | "purchasedAt"
+>;
