@@ -479,17 +479,19 @@ if (parsed.data.dependsOn != null) {
 | A4 | `drizzle-kit generate` эмитит ADD COLUMN + отдельный ADD CONSTRAINT для self-FK (как показанный SQL) | Pattern 1 | Низкий — сверить фактический вывод 0003 при генерации; тип/сигнатура FK verified против установленного пакета |
 | A5 | Исключать купленные покупки из НОВЫХ кандидатов, но сохранять текущую выбранную в edit | Code Examples (кандидаты) | Низкий — дискреция CONTEXT/UI-SPEC; чисто UX, не влияет на корректность |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Формат ошибки цикла: поле vs форм-левел**
    - What we know: UI-SPEC требует ошибку под селектом (`FormMessage`); действия сейчас возвращают только `{ ok, error }`.
    - What's unclear: расширять ли тип результата полем `field` или ввести отдельный код ошибки.
    - Recommendation: добавить опциональное `field?: "dependsOn"` в `CreateItemResult`/`UpdateItemResult`, в форме — `form.setError`. Минимальное изменение, соответствует UI-SPEC.
+   - **RESOLVED:** принято в план 05-03 — результат действия расширен `field?: "dependsOn"`, ошибка цикла выводится через `FormMessage` / `form.setError`.
 
 2. **Guard блокировки: 2 read'а vs self-join хелпер**
    - What we know: `findItemForUser` уже IDOR-безопасен; guard делает до 2 чтений.
    - What's unclear: нужен ли отдельный `isItemBlockedForUser` (один SQL с self-join) ради производительности.
    - Recommendation: для MVP — 2 read'а через существующий шов (проще, тестируемо); оптимизацию отложить.
+   - **RESOLVED:** принято в план 05-04 — guard делает 2 чтения через существующий `findItemForUser`; self-join оптимизация отложена в бэклог.
 
 ## Environment Availability
 
