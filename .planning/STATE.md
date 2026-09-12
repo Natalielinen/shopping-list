@@ -4,15 +4,15 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 5
 current_phase_name: Зависимости и блокировка
-status: planning
+status: executing
 stopped_at: Phase 5 UI-SPEC approved
-last_updated: "2026-08-29T09:27:48.063Z"
+last_updated: "2026-09-12T07:42:43.726Z"
 last_activity: 2026-08-09
 last_activity_desc: Phase 04 complete, transitioned to Phase 5
 progress:
   total_phases: 5
   completed_phases: 4
-  total_plans: 16
+  total_plans: 20
   completed_plans: 16
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-08-09)
 
 Phase: 5 — Зависимости и блокировка
 Plan: Not started
-Status: Ready to plan
+Status: Ready to execute
 Last activity: 2026-08-09 — Phase 04 complete, transitioned to Phase 5
 
 Progress: [██████████] 100%
