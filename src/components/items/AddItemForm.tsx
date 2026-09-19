@@ -103,14 +103,21 @@ export function AddItemForm({
   mode = "create",
   itemId,
   initialValues,
+  candidates = [],
 }: {
   mode?: "create" | "edit";
   itemId?: string;
   initialValues?: Partial<ItemFormInput>;
+  // Кандидаты зависимости (ITEM-06) приходят пропом из RSC-обёртки формы (уже
+  // отфильтрованы: свои, не self, не цикл, не купленные). Только примитивы.
+  candidates?: { id: string; title: string }[];
 } = {}) {
   const router = useRouter();
   const [formError, setFormError] = useState<string | null>(null);
   const isEdit = mode === "edit";
+  // 0 кандидатов → поле зависимости видимо, но не выбираемо (честное пустое
+  // состояние, S1 empty): триггер disabled с placeholder «Нет других покупок».
+  const hasCandidates = candidates.length > 0;
   const EDIT_SAVE_ERROR = "Не удалось сохранить изменения. Попробуйте ещё раз.";
 
   const form = useForm<ItemFormInput, unknown, ItemInput>({
@@ -155,7 +162,14 @@ export function AddItemForm({
       return;
     }
     if (!res.ok) {
-      setFormError(res.error);
+      // Ошибка выбора зависимости (владение/цикл, D-05) приходит с field:"dependsOn"
+      // → показываем под полем через FormMessage (Pitfall 6); прочие ошибки —
+      // форм-левел Alert.
+      if (res.field) {
+        form.setError(res.field, { message: res.error });
+      } else {
+        setFormError(res.error);
+      }
       return;
     }
     // D-09: навигацию выполняет клиент (action не редиректит, Pitfall 7).
@@ -374,6 +388,49 @@ export function AddItemForm({
                   value={(field.value as string | undefined) ?? ""}
                 />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="dependsOn"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Зависит от покупки</FormLabel>
+              <Select
+                // «none» — sentinel для «Без зависимости» (Radix запрещает пустой
+                // value); Zod маппит его обратно в null. При 0 кандидатов value не
+                // задаётся, чтобы триггер показал placeholder «Нет других покупок».
+                defaultValue={
+                  hasCandidates ? ((field.value as string | null) ?? "none") : undefined
+                }
+                onValueChange={field.onChange}
+                disabled={!hasCandidates}
+              >
+                <FormControl>
+                  <SelectTrigger className="h-11 w-full text-base">
+                    <SelectValue
+                      placeholder={
+                        hasCandidates
+                          ? "Выберите покупку (необязательно)"
+                          : "Нет других покупок"
+                      }
+                    />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="none" className="text-base">
+                    Без зависимости
+                  </SelectItem>
+                  {candidates.map((c) => (
+                    <SelectItem key={c.id} value={c.id} className="text-base">
+                      {c.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

@@ -1,8 +1,13 @@
 "use server";
 
 import { itemInputSchema, type ItemInput } from "@/lib/validation/item";
+import { wouldCreateCycle } from "@/lib/deps/cycle";
 import { requireUser } from "@/server/auth/current-user";
-import { deleteItemForUser, updateItemForUser } from "@/server/repos/items";
+import {
+  deleteItemForUser,
+  findItemsForUser,
+  updateItemForUser,
+} from "@/server/repos/items";
 
 // Server Action обновления покупки (ITEM-07 / D-03) — зеркалит createItem.
 //
@@ -17,8 +22,13 @@ import { deleteItemForUser, updateItemForUser } from "@/server/repos/items";
 // и был пойман try/catch). Возвращает результат-объект; переход на /list делает
 // клиент (router.refresh + push).
 const SAVE_ERROR = "Не удалось сохранить изменения. Попробуйте ещё раз.";
+// Дословно из UI-SPEC §Copywriting — единый текст для владения (чужой id) и цикла
+// (D-05); клиенту не раскрываем, чужая ли покупка. См. new/actions.ts.
+const CYCLE_ERROR = "Нельзя выбрать эту покупку — получится цикл зависимостей.";
 
-export type UpdateItemResult = { ok: true } | { ok: false; error: string };
+export type UpdateItemResult =
+  | { ok: true }
+  | { ok: false; error: string; field?: "dependsOn" };
 
 export async function updateItem(
   id: string,
@@ -31,6 +41,21 @@ export async function updateItem(
   const parsed = itemInputSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, error: SAVE_ERROR };
+  }
+
+  // Владение + цикл (never-trust-client / T-05-01, T-05-03), зеркалит createItem, но
+  // editedId = id: цепочка кандидата, достигающая редактируемой покупки, — цикл (D-05).
+  if (parsed.data.dependsOn != null) {
+    const own = await findItemsForUser(user.id);
+    const map = new Map(own.map((r) => [r.id, r.dependsOn]));
+    // Владение (IDOR / ASVS V4): чужой/несуществующий id → отклоняем под полем.
+    if (!map.has(parsed.data.dependsOn)) {
+      return { ok: false, error: CYCLE_ERROR, field: "dependsOn" };
+    }
+    // Цикл (D-05): self или цепочка кандидата, достигающая id → отклоняем под полем.
+    if (wouldCreateCycle(map, id, parsed.data.dependsOn)) {
+      return { ok: false, error: CYCLE_ERROR, field: "dependsOn" };
+    }
   }
 
   // Перевод рубли→копейки РОВНО ЗДЕСЬ (единственный write-путь, BL-01) — как в
