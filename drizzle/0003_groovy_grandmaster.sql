@@ -1,0 +1,2 @@
+ALTER TABLE "items" ADD COLUMN "depends_on" text;--> statement-breakpoint
+ALTER TABLE "items" ADD CONSTRAINT "items_depends_on_items_id_fk" FOREIGN KEY ("depends_on") REFERENCES "public"."items"("id") ON DELETE set null ON UPDATE no action;
