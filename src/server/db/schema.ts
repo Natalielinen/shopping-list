@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
+  type AnyPgColumn,
   boolean,
   date,
   index,
@@ -146,6 +147,14 @@ export const items = pgTable(
     // Необязательные поля покупки (nullable — не ломают существующие строки).
     link: text("link"),
     description: text("description"),
+    // ITEM-06 / D-01 / D-06: одна зависимость на покупку — nullable self-ref FK
+    // на items.id. Явная аннотация `(): AnyPgColumn` обязательна: разрывает
+    // циклическую self-инференцию типа (items ссылается сама на себя, Pitfall 1).
+    // onDelete "set null": при удалении покупки-зависимости ссылка обнуляется →
+    // зависимая авто-разблокируется, висячих ссылок нет, каскадного удаления нет.
+    dependsOn: text("depends_on").references((): AnyPgColumn => items.id, {
+      onDelete: "set null",
+    }),
     // Pitfall 4: дата без времени/TZ, чтобы вклад срока не сдвигался на день.
     deadline: date("deadline", { mode: "date" }),
     // Pitfall 10: деньги как integer-копейки (без float-ошибок, numeric→string).

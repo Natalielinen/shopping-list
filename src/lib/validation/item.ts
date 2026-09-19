@@ -73,6 +73,14 @@ export const itemInputSchema = z.object({
   doubts: z.enum(DOUBTS_VALUES).default("sure"), // ITEM-05 / D-01
   isCredit: z.boolean().default(false),
   monthlyPayment: optionalRubles, // ВСЕГДА optional (Pitfall 6 — условна лишь видимость)
+  // ITEM-06: зависимость от другой своей покупки. Radix Select не допускает пустой
+  // value, поэтому UI шлёт sentinel "none" — здесь он (как "" и null) приводится к
+  // null. Владение (candidate ∈ свои покупки) и запрет циклов НЕ проверяются здесь:
+  // схема синхронна и без доступа к БД — эти проверки живут в Server Action (плана 03).
+  dependsOn: z.preprocess(
+    (v) => (v === "" || v === "none" || v == null ? null : v),
+    z.string().nullable()
+  ).optional(),
 });
 
 export type ItemInput = z.infer<typeof itemInputSchema>;

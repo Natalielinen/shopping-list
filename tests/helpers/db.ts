@@ -68,6 +68,9 @@ export async function seedItem(
     // Статус «куплено» (D-07). По умолчанию не задаётся → NULL = покупка активна
     // (существующие тесты не ломаются). Задать Date, чтобы засеять купленную покупку.
     purchasedAt?: Date | null;
+    // ITEM-06 / D-06: зависимость от другой своей покупки (self-ref FK). По умолчанию
+    // NULL = без зависимости. Задать id, чтобы засеять граф зависимостей в iso-тестах.
+    dependsOn?: string | null;
   }
 ): Promise<{ id: string }> {
   const id = randomUUID();
@@ -83,6 +86,7 @@ export async function seedItem(
     isCredit: fields.isCredit ?? false,
     createdAt: new Date(),
     purchasedAt: fields.purchasedAt ?? null,
+    dependsOn: fields.dependsOn ?? null,
   });
   return { id };
 }

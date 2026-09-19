@@ -64,6 +64,10 @@ export async function updateItemForUser(
       deadline: data.deadline ?? null,
       price: data.price ?? null,
       monthlyPayment: data.monthlyPayment ?? null,
+      // CR-01 / Pitfall 4: выбор «Без зависимости» в edit шлёт undefined; чтобы он
+      // персистился как SET depends_on = NULL (а не оставлял старую ссылку), тоже
+      // нормализуем на едином write-шве update.
+      dependsOn: data.dependsOn ?? null,
     })
     .where(and(eq(items.id, id), eq(items.userId, userId)))
     .returning();
