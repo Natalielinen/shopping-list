@@ -226,6 +226,41 @@ describe("itemInputSchema — description (IN-02)", () => {
   });
 });
 
+describe("itemInputSchema — dependsOn (ITEM-06, sentinel→null)", () => {
+  it("превращает sentinel «none» в null (Radix Select не допускает пустой value)", () => {
+    const result = itemInputSchema.safeParse({ ...validBase, dependsOn: "none" });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.dependsOn).toBeNull();
+  });
+
+  it("превращает пустую строку в null", () => {
+    const result = itemInputSchema.safeParse({ ...validBase, dependsOn: "" });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.dependsOn).toBeNull();
+  });
+
+  it("превращает явный null в null", () => {
+    const result = itemInputSchema.safeParse({ ...validBase, dependsOn: null });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.dependsOn).toBeNull();
+  });
+
+  it("валиден при отсутствии поля (optional)", () => {
+    const result = itemInputSchema.safeParse(validBase);
+    expect(result.success).toBe(true);
+  });
+
+  it("сохраняет строковый id зависимости", () => {
+    const result = itemInputSchema.safeParse({
+      ...validBase,
+      dependsOn: "01234567-89ab-cdef-0123-456789abcdef",
+    });
+    expect(result.success).toBe(true);
+    if (result.success)
+      expect(result.data.dependsOn).toBe("01234567-89ab-cdef-0123-456789abcdef");
+  });
+});
+
 describe("itemInputSchema — полные payload'ы", () => {
   it("принимает payload только с обязательными полями", () => {
     const result = itemInputSchema.safeParse(validBase);
