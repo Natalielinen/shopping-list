@@ -2,18 +2,18 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 5
-current_phase_name: Зависимости и блокировка
+current_phase: 05
+current_phase_name: dependencies-blocking
 status: executing
-stopped_at: Phase 5 UI-SPEC approved
-last_updated: "2026-09-12T07:42:43.726Z"
-last_activity: 2026-08-09
-last_activity_desc: Phase 04 complete, transitioned to Phase 5
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-09-19T04:59:22.912Z"
+last_activity: 2026-09-19
+last_activity_desc: Phase 05 execution started
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 20
-  completed_plans: 16
+  completed_plans: 17
 ---
 
 # Project State
@@ -23,16 +23,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-09)
 
 **Core value:** Пользователь видит свои покупки автоматически отсортированными по осмысленному приоритету, чтобы понимать, что покупать в первую очередь.
-**Current focus:** Phase 5 — Зависимости и блокировка
+**Current focus:** Phase 05 — dependencies-blocking
 
 ## Current Position
 
-Phase: 5 — Зависимости и блокировка
-Plan: Not started
+Phase: 05 (dependencies-blocking) — EXECUTING
+Plan: 2 of 4
 Status: Ready to execute
-Last activity: 2026-08-09 — Phase 04 complete, transitioned to Phase 5
+Last activity: 2026-09-19 — Phase 05 execution started
 
-Progress: [██████████] 100%
+Progress: [█████████░] 85%
 
 ## Performance Metrics
 
@@ -76,6 +76,7 @@ Progress: [██████████] 100%
 | Phase 04 P03 | 6min | 2 tasks | 10 files |
 | Phase 04 P04 | 15min | 3 tasks | 5 files |
 | Phase 04 P05 | ~10min | 2 tasks | 2 files |
+| Phase 05 P01 | 4min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -109,6 +110,7 @@ Recent decisions affecting current work:
 - [Phase ?]: 04-04: ListControls — контролируемый client-leaf без состояния (sortKey/showPurchased держит ListView, эфемерный useState, D-09); партиция ДО сортировки (§Pitfall 1 — архив всегда sortPurchased); купленная карточка — избыточный канал статуса (opacity-70 + line-through, не только цвет)
 - [Phase ?]: 04-04: визуальный бэкстоп 375px (LIST-08) отложен в UAT (/gsd-verify-work 4), как визуальные бэкстопы Фазы 3 — не сфабрикован, ждёт человека
 - [Phase ?]: Тач-цель ≥44px чекбокса «куплено» — через обёртку-<label> (h-11 w-11) вокруг глифа size-5, а не раздуванием самого Checkbox (G-04-2)
+- [Phase ?]: [05-01] Чистое ядро зависимостей: isBlocked (прямая блокировка, без обхода графа, D-02) + wouldCreateCycle (обход depends_on с visited-set, конечен при corrupt cycle, D-05); ноль импортов, 13 юнит-тестов зелёные (TDD RED→GREEN)
 
 ### Pending Todos
 
@@ -135,6 +137,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-29T09:27:48.045Z
-Stopped at: Phase 5 UI-SPEC approved
-Resume file: .planning/phases/05-dependencies-blocking/05-UI-SPEC.md
+Last session: 2026-09-19T04:59:16.063Z
+Stopped at: Completed 05-01-PLAN.md
+Resume file: None

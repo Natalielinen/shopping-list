@@ -158,11 +158,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Покупку с невыполненной зависимостью нельзя отметить купленной, пока не куплен товар, от которого она зависит.
   3. Заблокированные покупки визуально отличаются в списке, чтобы пользователь понимал, почему с ними пока нельзя действовать.
 
-**Plans**: 4 plans
+**Plans**: 1/4 plans executed
 
 **Wave 1**
 
-- [ ] 05-01-PLAN.md — Чистая логика (TDD): isBlocked (derivation блокировки) + wouldCreateCycle (защита от циклов, D-05)
+- [x] 05-01-PLAN.md — Чистая логика (TDD): isBlocked (derivation блокировки) + wouldCreateCycle (защита от циклов, D-05)
 - [ ] 05-02-PLAN.md — Модель данных: self-FK depends_on (D-01/D-06) + [BLOCKING] миграция 0003 + dependsOn в Zod/repo + интеграционные тесты FK
 
 **Wave 2** *(blocked on Wave 1 completion)*
@@ -186,4 +186,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Добавление покупок с автоматическим приоритетом | 5/5 | Complete    | 2026-08-01 |
 | 3. Редактирование и удаление покупок | 2/2 | Complete    | 2026-08-02 |
 | 4. Список — сортировка, фильтры и архив | 5/5 | Complete    | 2026-08-09 |
-| 5. Зависимости и блокировка | 0/4 | Not started | - |
+| 5. Зависимости и блокировка | 1/4 | In Progress|  |
