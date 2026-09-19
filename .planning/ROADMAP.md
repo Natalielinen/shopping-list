@@ -158,7 +158,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Покупку с невыполненной зависимостью нельзя отметить купленной, пока не куплен товар, от которого она зависит.
   3. Заблокированные покупки визуально отличаются в списке, чтобы пользователь понимал, почему с ними пока нельзя действовать.
 
-**Plans**: 3/4 plans executed
+**Plans**: 4/4 plans executed
 
 **Wave 1**
 
@@ -171,7 +171,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 05-04-PLAN.md — Серверный guard блокировки (D-03, defense-in-depth) + серверный текст ошибки в тост + человеко-проверка визуала/бэкстопов (DEP-01/DEP-02)
+- [x] 05-04-PLAN.md — Серверный guard блокировки (D-03, defense-in-depth) + серверный текст ошибки в тост + человеко-проверка визуала/бэкстопов (DEP-01/DEP-02)
 
 **UI hint**: yes
 
@@ -186,4 +186,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Добавление покупок с автоматическим приоритетом | 5/5 | Complete    | 2026-08-01 |
 | 3. Редактирование и удаление покупок | 2/2 | Complete    | 2026-08-02 |
 | 4. Список — сортировка, фильтры и архив | 5/5 | Complete    | 2026-08-09 |
-| 5. Зависимости и блокировка | 3/4 | In Progress|  |
+| 5. Зависимости и блокировка | 4/4 | In Progress|  |

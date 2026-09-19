@@ -4,16 +4,16 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 05
 current_phase_name: dependencies-blocking
-status: executing
-stopped_at: Completed 05-03-PLAN.md
-last_updated: "2026-09-19T05:28:05.736Z"
+status: verifying
+stopped_at: Completed 05-04-PLAN.md (last plan — ready for verification)
+last_updated: "2026-09-19T06:16:15.450Z"
 last_activity: 2026-09-19
 last_activity_desc: Phase 05 execution started
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 20
-  completed_plans: 19
+  completed_plans: 20
 ---
 
 # Project State
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-08-09)
 
 Phase: 05 (dependencies-blocking) — EXECUTING
 Plan: 4 of 4
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-09-19 — Phase 05 execution started
 
-Progress: [██████████] 95%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -79,6 +79,7 @@ Progress: [██████████] 95%
 | Phase 05 P01 | 4min | 2 tasks | 4 files |
 | Phase 05 P02 | 15min | 3 tasks | 7 files |
 | Phase 05 P03 | 21min | 2 tasks | 11 files |
+| Phase 05 P04 | 42min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -116,6 +117,9 @@ Recent decisions affecting current work:
 - [Phase ?]: [05-02] Единичный self-FK items.depends_on (D-01), onDelete set null (D-06) — миграция 0003 применена; удаление зависимости авто-обнуляет ссылку без каскада; ownership/cycle-проверка перенесена в Server Action 05-03
 - [Phase ?]: 05-03: Server Action — авторитетный шов владения (candidate ∈ findItemsForUser) + цикла (wouldCreateCycle) до записи; клиентская фильтрация кандидатов лишь UX
 - [Phase ?]: 05-03: производные blocked/dependencyTitle считаются в RSC byId-lookup'ом и пересекают границу RSC→client только примитивами; авто-разблокировка на существующем router.refresh()
+- [Phase ?]: 05-04: серверный guard в setItemPurchased (D-03/T-05-02) — defense-in-depth backstop к disabled-чекбоксу; отметка заблокированной покупки отклоняется на сервере до записи через userId-scoped findItemForUser + isBlocked
+- [Phase ?]: 05-04: серверный текст ошибки (BLOCKED_ERROR) пробрасывается в тост (toast.error(res.error)) — обойдённый disabled-UI объясняет причину (S3 error)
+- [Phase ?]: 05-04: fileParallelism:false в vitest.config.ts — DB-интеграционные файлы делят одну тестовую PG (Rule 3)
 
 ### Pending Todos
 
@@ -142,6 +146,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-09-19T05:27:58.104Z
-Stopped at: Completed 05-03-PLAN.md
+Last session: 2026-09-19T06:15:52.165Z
+Stopped at: Completed 05-04-PLAN.md (last plan — ready for verification)
 Resume file: None
