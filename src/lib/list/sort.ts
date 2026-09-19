@@ -21,6 +21,14 @@ export interface ListItem {
   /** item.purchasedAt?.getTime() ?? null; null = активна (D-07). */
   purchasedAtMs: number | null;
   title: string;
+  /**
+   * Производное на чтении (D-02): есть незакрытая зависимость → покупку пока нельзя
+   * купить. Считается в list/page.tsx (RSC) примитивом. НЕ участвует в сортировке/
+   * партиции — компараторы ниже его игнорируют.
+   */
+  blocked: boolean;
+  /** title покупки-зависимости для подписи «Заблокировано: …» (null, если не blocked). */
+  dependencyTitle: string | null;
 }
 
 /**

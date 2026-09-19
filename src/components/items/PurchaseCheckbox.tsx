@@ -31,9 +31,16 @@ const STATUS_ERROR = "Не удалось обновить статус. Поп�
 export function PurchaseCheckbox({
   id,
   purchased,
+  blocked = false,
+  dependencyTitle = null,
 }: {
   id: string;
   purchased: boolean;
+  // Блокировка (DEP-01 / D-03/D-04): при blocked чекбокс disabled и не переключается.
+  // Опциональны с дефолтами — незаблокированные вызовы (и тесты) не обязаны их
+  // передавать (обратная совместимость с Фазой 4).
+  blocked?: boolean;
+  dependencyTitle?: string | null;
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -74,9 +81,17 @@ export function PurchaseCheckbox({
     <label className="flex h-11 w-11 shrink-0 items-center justify-center">
       <Checkbox
         checked={optimistic}
-        disabled={isPending}
+        // Блокировка (DEP-01 / D-03): disabled при blocked — Radix-приглушение +
+        // cursor-not-allowed, тап игнорируется (тач-зона-обёртка 44px сохранена).
+        disabled={isPending || blocked}
         onCheckedChange={(v) => toggle(v === true)}
-        aria-label={optimistic ? "Вернуть в активные" : "Отметить купленной"}
+        aria-label={
+          blocked
+            ? `Нельзя отметить купленной, пока не куплено «${dependencyTitle}»`
+            : optimistic
+              ? "Вернуть в активные"
+              : "Отметить купленной"
+        }
         className="size-5"
       />
     </label>

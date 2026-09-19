@@ -67,6 +67,8 @@ export function ListView({ items }: { items: ListViewItem[] }) {
                 total={item.total}
                 breakdown={item.breakdown}
                 purchased={false}
+                blocked={item.blocked}
+                dependencyTitle={item.dependencyTitle}
               />
             </li>
           ))}
@@ -104,6 +106,10 @@ export function ListView({ items }: { items: ListViewItem[] }) {
                   total={item.total}
                   breakdown={item.breakdown}
                   purchased={true}
+                  // В архиве blocked всегда false (купленная не блокируется, Pitfall 3),
+                  // но проп передаётся единообразно.
+                  blocked={item.blocked}
+                  dependencyTitle={item.dependencyTitle}
                 />
               </li>
             ))}

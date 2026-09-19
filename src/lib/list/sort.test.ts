@@ -15,6 +15,9 @@ const makeItem = (overrides: Partial<ListItem> = {}): ListItem => ({
   total: 0,
   createdAtMs: 0,
   purchasedAtMs: null,
+  // Поля блокировки (Фаза 5): не участвуют в сортировке/партиции — дефолты для фабрики.
+  blocked: false,
+  dependencyTitle: null,
   ...overrides,
 });
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Pencil } from "lucide-react";
+import { Lock, Pencil } from "lucide-react";
 
 import type { Contribution } from "@/lib/scoring/scoring";
 import { cn } from "@/lib/utils";
@@ -31,12 +31,17 @@ export function ItemCard({
   total,
   breakdown,
   purchased,
+  blocked,
+  dependencyTitle,
 }: {
   id: string;
   title: string;
   total: number;
   breakdown: Contribution[];
   purchased: boolean;
+  // Производное на чтении (D-02): покупка заблокирована незакрытой зависимостью.
+  blocked: boolean;
+  dependencyTitle: string | null;
 }) {
   return (
     // Приглушённое лечение купленной карточки (§Color / UI-SPEC): при purchased
@@ -50,7 +55,12 @@ export function ItemCard({
             (min-w-0 truncate) → badge (shrink-0) — три независимых тач-цели
             ≥44px, ряд не ломается длинным названием (§Pitfall 7 / UI-SPEC). */}
         <div className="flex items-center gap-2">
-          <PurchaseCheckbox id={id} purchased={purchased} />
+          <PurchaseCheckbox
+            id={id}
+            purchased={purchased}
+            blocked={blocked}
+            dependencyTitle={dependencyTitle}
+          />
           <span
             className={cn(
               "min-w-0 flex-1 truncate text-xl font-semibold",
@@ -61,6 +71,22 @@ export function ItemCard({
           </span>
           <PriorityBadge total={total} />
         </div>
+        {/* Строка-индикатор блокировки (DEP-02 / D-04) — ТОЛЬКО при blocked, между
+            рядом заголовка и рядом действий. Избыточный канал (иконка + текст +
+            disabled-чекбокс); карточка НЕ приглушается (opacity не трогаем, §Color —
+            приглушение только у purchased). Длинное название усекается (min-w-0
+            truncate), иконка Lock остаётся видимой (shrink-0). */}
+        {blocked ? (
+          <div className="flex items-center gap-1">
+            <Lock
+              className="size-4 shrink-0 text-muted-foreground"
+              aria-hidden
+            />
+            <span className="min-w-0 truncate text-sm text-muted-foreground">
+              Заблокировано: {dependencyTitle}
+            </span>
+          </div>
+        ) : null}
         <ScoreBreakdown
           breakdown={breakdown}
           total={total}
