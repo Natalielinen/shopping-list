@@ -357,3 +357,104 @@ describe("setItemPurchasedForUser — изоляция записи по userId 
     expect(row!.purchasedAt).toBeNull();
   });
 });
+
+// Self-FK depends_on: персист ссылки, авто-обнуление при удалении зависимости и
+// очистка на UPDATE (ITEM-06 / D-01 / D-06). Проверяется на РЕАЛЬНОЙ тестовой
+// Postgres, потому что поведение FK `ON DELETE SET NULL` задаётся миграцией 0003 и
+// живёт исключительно в БД (schema.ts даёт лишь типы — schema-gate): только запрос
+// к настоящей PG доказывает, что удаление покупки-зависимости обнуляет ссылку
+// зависимой строки без каскадного удаления (авто-разблокировка, D-06).
+describe("dependsOn — self-FK и очистка (ITEM-06 / D-06)", () => {
+  const baseData = {
+    title: "dep-item",
+    category: "home",
+    urgency: "urgent",
+    need: "needed",
+    benefit: "savesResources",
+    doubts: "sure",
+    isCredit: false,
+  } as const;
+
+  it("create с dependsOn = id другой своей покупки → персистится и читается обратно", async () => {
+    const a = await seedUser("a@test.dev");
+    // Покупка-зависимость (на неё ссылаемся).
+    const dependency = await seedItem(a.id, { title: "dependency" });
+
+    const created = await createItemForUser(a.id, {
+      ...baseData,
+      title: "dependent",
+      dependsOn: dependency.id,
+    });
+
+    expect(created).toBeDefined();
+    expect(created!.dependsOn).toBe(dependency.id);
+
+    // Ре-чтение из БД подтверждает персист ссылки.
+    const row = await findItemForUser(a.id, created!.id);
+    expect(row!.dependsOn).toBe(dependency.id);
+  });
+
+  it("удаление покупки-зависимости → depends_on ссылающейся строки становится NULL (FK set null, без каскада)", async () => {
+    const a = await seedUser("a@test.dev");
+    // Граф: dependent → dependency.
+    const dependency = await seedItem(a.id, { title: "dependency" });
+    const dependent = await seedItem(a.id, {
+      title: "dependent",
+      dependsOn: dependency.id,
+    });
+
+    // Санити: ссылка на месте до удаления.
+    const before = await findItemForUser(a.id, dependent.id);
+    expect(before!.dependsOn).toBe(dependency.id);
+
+    // Удаляем покупку-зависимость.
+    const deleted = await deleteItemForUser(a.id, dependency.id);
+    expect(deleted).not.toBeNull();
+
+    // FK ON DELETE SET NULL: зависимая строка НЕ удалена каскадно, её depends_on обнулён.
+    const after = await findItemForUser(a.id, dependent.id);
+    expect(after).not.toBeNull();
+    expect(after!.dependsOn).toBeNull();
+  });
+
+  it("update с dependsOn undefined → depends_on обнуляется (CR-01, выбор «Без зависимости»)", async () => {
+    const a = await seedUser("a@test.dev");
+    const dependency = await seedItem(a.id, { title: "dependency" });
+    const dependent = await seedItem(a.id, {
+      title: "dependent",
+      dependsOn: dependency.id,
+    });
+
+    // Форма шлёт undefined для снятой зависимости — updateItemForUser нормализует → NULL.
+    const updated = await updateItemForUser(a.id, dependent.id, {
+      ...baseData,
+      title: "dependent",
+      dependsOn: undefined,
+    });
+
+    expect(updated).not.toBeNull();
+
+    const row = await findItemForUser(a.id, dependent.id);
+    expect(row!.dependsOn).toBeNull();
+  });
+
+  it("update с dependsOn null → depends_on обнуляется", async () => {
+    const a = await seedUser("a@test.dev");
+    const dependency = await seedItem(a.id, { title: "dependency" });
+    const dependent = await seedItem(a.id, {
+      title: "dependent",
+      dependsOn: dependency.id,
+    });
+
+    const updated = await updateItemForUser(a.id, dependent.id, {
+      ...baseData,
+      title: "dependent",
+      dependsOn: null,
+    });
+
+    expect(updated).not.toBeNull();
+
+    const row = await findItemForUser(a.id, dependent.id);
+    expect(row!.dependsOn).toBeNull();
+  });
+});
