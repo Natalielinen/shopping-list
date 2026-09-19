@@ -54,7 +54,10 @@ export function PurchaseCheckbox({
       const res = await setItemPurchased(id, next);
       if (!res.ok) {
         // Ошибка: оптимистичное значение откатится по завершении транзакции.
-        toast.error(STATUS_ERROR);
+        // Показываем текст, который вернул сервер (guard-отклонение блокировки
+        // объясняет причину обойдённого disabled-UI, S3 error / D-03); STATUS_ERROR
+        // — фолбэк на случай пустого res.error (серверный экшен всегда его заполняет).
+        toast.error(res.error || STATUS_ERROR);
         return;
       }
 
