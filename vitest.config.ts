@@ -28,5 +28,12 @@ export default defineConfig({
     // Каталог `e2e/` — спеки Playwright (@playwright/test); Vitest не должен их
     // собирать, иначе падает на несовместимом runner-API.
     exclude: [...defaultExclude, "e2e/**"],
+    // Интеграционные тесты БД (`@vitest-environment node`, напр. items.iso.test.ts и
+    // actions.guard.test.ts) бьют по ОДНОЙ физической тестовой Postgres и в
+    // beforeEach делают глобальный TRUNCATE + реseed фиксированных пользователей.
+    // При параллельном прогоне файлов их TRUNCATE'ы гонятся (чужие строки исчезают
+    // из-под теста; unique email конфликтует). Отключаем параллелизм на уровне
+    // файлов, чтобы DB-тесты выполнялись последовательно на общей БД (suite мал).
+    fileParallelism: false,
   },
 });
