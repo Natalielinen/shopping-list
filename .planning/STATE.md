@@ -5,15 +5,15 @@ milestone_name: milestone
 current_phase: 05
 current_phase_name: dependencies-blocking
 status: executing
-stopped_at: Completed 05-01-PLAN.md
-last_updated: "2026-09-19T04:59:22.912Z"
+stopped_at: Completed 05-02-PLAN.md
+last_updated: "2026-09-19T05:12:02.440Z"
 last_activity: 2026-09-19
 last_activity_desc: Phase 05 execution started
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 20
-  completed_plans: 17
+  completed_plans: 18
 ---
 
 # Project State
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-08-09)
 ## Current Position
 
 Phase: 05 (dependencies-blocking) — EXECUTING
-Plan: 2 of 4
+Plan: 3 of 4
 Status: Ready to execute
 Last activity: 2026-09-19 — Phase 05 execution started
 
-Progress: [█████████░] 85%
+Progress: [█████████░] 90%
 
 ## Performance Metrics
 
@@ -77,6 +77,7 @@ Progress: [█████████░] 85%
 | Phase 04 P04 | 15min | 3 tasks | 5 files |
 | Phase 04 P05 | ~10min | 2 tasks | 2 files |
 | Phase 05 P01 | 4min | 2 tasks | 4 files |
+| Phase 05 P02 | 15min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -111,6 +112,7 @@ Recent decisions affecting current work:
 - [Phase ?]: 04-04: визуальный бэкстоп 375px (LIST-08) отложен в UAT (/gsd-verify-work 4), как визуальные бэкстопы Фазы 3 — не сфабрикован, ждёт человека
 - [Phase ?]: Тач-цель ≥44px чекбокса «куплено» — через обёртку-<label> (h-11 w-11) вокруг глифа size-5, а не раздуванием самого Checkbox (G-04-2)
 - [Phase ?]: [05-01] Чистое ядро зависимостей: isBlocked (прямая блокировка, без обхода графа, D-02) + wouldCreateCycle (обход depends_on с visited-set, конечен при corrupt cycle, D-05); ноль импортов, 13 юнит-тестов зелёные (TDD RED→GREEN)
+- [Phase ?]: [05-02] Единичный self-FK items.depends_on (D-01), onDelete set null (D-06) — миграция 0003 применена; удаление зависимости авто-обнуляет ссылку без каскада; ownership/cycle-проверка перенесена в Server Action 05-03
 
 ### Pending Todos
 
@@ -137,6 +139,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-09-19T04:59:16.063Z
-Stopped at: Completed 05-01-PLAN.md
+Last session: 2026-09-19T05:11:55.663Z
+Stopped at: Completed 05-02-PLAN.md
 Resume file: None
