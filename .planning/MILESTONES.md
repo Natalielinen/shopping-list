@@ -1,0 +1,30 @@
+# Milestones
+
+## v1.0 MVP (Shipped: 2026-10-03)
+
+**Phases completed:** 5 phases, 20 plans, 44 tasks
+
+**Key accomplishments:**
+
+- Next.js 16 + Tailwind v4 + Drizzle/postgres.js + Better Auth стек скаффолжен и компилируется; поднят server-only Drizzle-клиент, настроены Vitest 4 и Playwright, а общий Zod-контракт валидации email/пароля написан по TDD и покрыт зелёным тестом.
+- Better Auth настроен под зафиксированные решения (email/password, Argon2id через @node-rs/argon2, явная 30-дневная сессия), схема Better Auth + таблица `items` сгенерирована CLI и применена к живой Postgres миграциями, а шов изоляции userId (`getCurrentUser` -> `findItemsForUser`) доказан двухпользовательским интеграционным тестом против реальной тестовой БД (AUTH-04 / критерий №4).
+- Собран сквозной срез Walking Skeleton: регистрация -> авто-вход -> защищённый пустой список, затем вход с сохранением сессии между перезагрузками — доказана вся цепочка (форма -> authClient -> Better Auth -> сессия -> серверный guard в layout -> getCurrentUser -> findItemsForUser -> рендер пустого стейта) на реальном e2e-пути (Playwright), формы покрыты RTL, редиректы D-05/D-07 и пустой стейт D-06 зелёные.
+- Завершён контур аутентификации фазы: кнопка «Выйти» в шапке инвалидирует серверную сессию и уводит на `/login` (Criterion 3 / AUTH-03), маппинг ошибок (`mapAuthError`) сведён к текстам UI-SPEC с enumeration-guard на входе (V7), а браузерный e2e-тест на двух пользователях подтвердил изоляцию данных на уровне реального пути (AUTH-04 end-to-end) — полный прогон `npx vitest run` (25/25) и `npx playwright test` (7/7) зелёный.
+- Чистый детерминированный движок приоритета (deadlinePoints/computeTotal/computeBreakdown/priorityLevel) на exhaustive Record-шкалах с внедряемой now:Date, покрыт 57 юнит-тестами; date-fns@4 и test-скрипты подключены.
+- Единый Zod-контракт `itemInputSchema` (клиент+сервер), таблица `items` физически расширена полями покупки через применённую миграцию, и write-seam `createItemForUser` со scoping по `userId`, подтверждённый интеграционным тестом read+write изоляции.
+- Доказан весь вертикальный путь Фазы 2 за один проход: форма обязательных полей → Server Action `createItem` (userId из сессии, серверная ре-валидация) → `createItemForUser` (insert со scoping) → клиентский редирект на `/list` → RSC-список с вычисленным на чтении badge приоритета, отсортированный по убыванию `total`; подтверждён сквозным Playwright e2e.
+- Расширение доказанного tracer-среза до полной формы покупки: все необязательные поля + условный monthlyPayment по isCredit (с очисткой при снятии) + doubts по умолчанию «Уверен(а)», плюс постоянная кнопка «Добавить» (Plus) в шапке на /list/new.
+- Client-leaf `ScoreBreakdown` на shadcn `Collapsible`: свёрнутая по умолчанию построчная знаковая разбивка вкладов (Категория/Срочность/Необходимость/Выгода/Срок/Сомнения/Кредит) + «Итого», согласованная с total badge через единый `now` в RSC-родителе.
+- Редактирование покупки end-to-end (ITEM-07): иконка «карандаш» на карточке → предзаполненная /list/[id]/edit → Server Action updateItem со scoping по userId → редирект /list с пересчитанным на чтении badge приоритета.
+- Удаление покупки end-to-end (ITEM-08): иконка «корзина» на карточке → AlertDialog подтверждения → Server Action deleteItem со scoping по userId → deleteItemForUser (hard delete) → router.refresh(), покупка исчезает из списка. Защита от случайного необратимого действия (D-05) и изоляция по userId (T-3-05, SC-3).
+- Nullable-колонка `items.purchased_at` (D-07) + аддитивная миграция 0002 + изолированный по userId, обратимый write-шов `setItemPurchasedForUser`, доказанный IDOR/persist/reversal-тестом на реальной Postgres
+- Чистый детерминированный модуль `src/lib/list/sort.ts` (SortKey/ListItem + partitionByPurchased/sortActive/sortPurchased) с компараторами трёх режимов, tiebreakers D-02, localeCompare('ru', base) и независимой сортировкой архива по purchasedAt убыв. — покрыт 19 юнит-тестами TDD RED→GREEN
+- Тончайший сквозной путь «отметить покупку купленной» прошит через ВСЕ слои Фазы 4 (RSC-примитивы → клиентский ListView → client-leaf PurchaseCheckbox с useOptimistic → Server Action setItemPurchased → repo-шов 04-01 → PG → router.refresh), доказан сквозным Playwright-тестом; undo-тост sonner смонтирован
+- Управляемый mobile-first список: закреплённая панель ListControls (Select трёх режимов сортировки D-01 + Checkbox фильтра «показывать купленные» D-06), отдельная секция «Куплено» с приглушёнными (opacity-70 + line-through) карточками, все три empty-варианта и эфемерное клиентское состояние (useState, D-09); mobile-first бэкстоп на 375px отложен в UAT.
+- Косметическая gap-правка: чекбокс «куплено» больше не рендерится как 44×44px квадрат — сам глиф вернулся к нормальному size-5 (20px), а тач-зона ≥44px обеспечена обёрткой-`<label>` (h-11 w-11 shrink-0); оптимистичное поведение, undo-тост и aria-labels не тронуты; TDD RED→GREEN, весь набор зелёный.
+- Два чистых детерминированных модуля в `src/lib/deps/` (TDD RED→GREEN): `isBlocked` — производный флаг прямой блокировки, и `wouldCreateCycle` — защита от циклов с visited-set; 13 юнит-тестов зелёные за ~1.3 c.
+- Self-referencing FK `items.depends_on → items.id ON DELETE SET NULL` (миграция 0003) плюс контракт Zod (`dependsOn`, sentinel→null) и нормализация репозитория — единственный one-way шаг фазы заложен, интеграционные тесты FK зелёные на реальной PG.
+- Сквозной вертикальный срез зависимостей: выбор своей покупки зависимостью в форме → Server Action (владение + цикл) → persist depends_on → производная блокировка в списке (Lock + disabled-чекбокс) → авто-разблокировка после покупки зависимости, доказанный Playwright end-to-end.
+- Серверный defense-in-depth guard в `setItemPurchased`: отметка «куплено» заблокированной покупки отклоняется на сервере ДО записи через userId-scoped `findItemForUser` + чистый `isBlocked`, серверный текст ошибки пробрасывается в тост, доказано action-уровневым интеграционным тестом на реальной PG; визуальные бэкстопы 375px подтверждены пользователем.
+
+---

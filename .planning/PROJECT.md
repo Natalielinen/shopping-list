@@ -47,10 +47,12 @@ Web-приложение (mobile-first) для составления списк
 
 ## Context
 
+- **Текущее состояние:** отгружен **v1.0 MVP** (Phases 1–5, 20 планов, 44 задачи, 2026-10-03). Стек в проде-готовом виде: Next.js 16 (App Router, RSC, Server Actions) + TypeScript, PostgreSQL + Drizzle (миграции 0001–0003), Better Auth (Argon2id, DB-сессии), Zod, shadcn/ui + Tailwind v4. ~6850 LOC (src ts/tsx). Покрытие: 219 unit/integration (Vitest) + e2e (Playwright), все зелёные.
 - Разработка ведётся по TDD (тесты пишутся до/вместе с кодом)
 - Mobile-first: интерфейс проектируется сначала под телефон
 - Схема покупки (item) детально описана в исходном `SUMMARY.md` в корне проекта — источник истины по полям и очкам
 - Шкалы Category / Urgency / Need / Benefit приняты как есть из SUMMARY
+- **Известный техдолг:** проверка владения+цикла зависимости продублирована в create/edit Server Actions (вынести общий хелпер — вынесено в задачу); `05-VALIDATION.md` остался черновиком (Nyquist sampling-контракт); security threat-model фазы 5 не прогнан через `/gsd-secure-phase`.
 
 ## Constraints
 
@@ -98,4 +100,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-19 after Phase 5 (milestone v1.0 complete)*
+*Last updated: 2026-10-03 after v1.0 milestone*
