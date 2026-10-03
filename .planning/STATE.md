@@ -23,7 +23,7 @@ current_phase_name: dependencies-blocking
 See: .planning/PROJECT.md (updated 2026-08-09)
 
 **Core value:** Пользователь видит свои покупки автоматически отсортированными по осмысленному приоритету, чтобы понимать, что покупать в первую очередь.
-**Current focus:** Phase 05 — dependencies-blocking
+**Current focus:** Planning next milestone (v1.0 MVP shipped)
 
 ## Current Position
 
